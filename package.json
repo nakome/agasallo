@@ -1,0 +1,8 @@
+{
+    "scripts": {
+        "dev": "space dev",
+        "install:all": "npm run install:api && npm run install:website",
+        "install:api": "cd api && npm install",
+        "install:website": "cd website && npm install"
+    }
+}

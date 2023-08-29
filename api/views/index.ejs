@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <title>Agasallo | <%= data.title %></title>
+
+    <% if(data.css_links) { %>
+        <% data.css_links.split('\n').forEach(function(link) { %>
+            <link rel="stylesheet" href="<%= link.trim() %>" />
+        <% }); %>
+    <% }; %>
+
+    <style rel="stylesheet"><%- data.css_code %></style>
+</head>
+<body>
+    <%- data.html_code %>
+
+    <% if(data.js_links) { %>
+        <% data.js_links.split('\n').forEach(function(link) { %>
+            <script src="<%= link.trim() %>"></script>
+        <% }); %>
+    <% }; %>
+    <script rel="javascript"><%- data.js_code %></script>
+</body>
+</html>
