@@ -9,8 +9,12 @@ import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { Button,Select } from "./Forms";
 
+// language
+import lang from "../config/language.json";
+
 export default function CodeBlock(props) {
   return (
+  <React.Suspense fallback={<>{lang.loadingcomponent}..</>}>
     <div className="code">
       <div className="code-header">
         <Select
@@ -32,5 +36,6 @@ export default function CodeBlock(props) {
         />
       </div>
     </div>
+  </React.Suspense>
   );
 }

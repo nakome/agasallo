@@ -19,7 +19,7 @@ import Card from "./Card";
 import { Loader } from "./Loader";
 
 // language
-import lang from "../config/language.json"
+import lang from "../config/language.json";
 
 export default function DrawerContainer(props) {
   // Search
@@ -38,7 +38,9 @@ export default function DrawerContainer(props) {
     }
   };
 
-  React.useEffect(() => {loadDataOnDrawer()},[props.isOpen])
+  React.useEffect(() => {
+    loadDataOnDrawer();
+  }, [props.isOpen]);
 
   // Delete bin
   const handleDeleteBin = async (key) => {
@@ -76,41 +78,43 @@ export default function DrawerContainer(props) {
   }
 
   return (
-    <Drawer
-      open={props.isOpen}
-      onClose={props.toggleDrawer}
-      direction="left"
-      className="drawer-menu"
-    >
-      <DrawerHeader>
-        <InputSearch
-          required={true}
-          value={searchTitle}
-          onChange={(evt) => setSearchTitle(evt.target.value)}
-          onKeyPress={handleSearchDrawerData}
-          placeholder={lang.searchtitle}
-        />
-      </DrawerHeader>
-      <DrawerBody>
-        <section
-          style={{ position: "relative", width: "100%", height: "100%" }}
-        >
-          {loading ? (
-            <Loader />
-          ) : data.count > 0 ? (
-            data.items.map((item, index) => (
-              <Card
-                openBin={() => props.handleOpenBin(item.key)}
-                deleteBin={() => handleDeleteBin(item.key)}
-                key={item.key}
-                data={item}
-              />
-            ))
-          ) : (
-            <EmptyDb />
-          )}
-        </section>
-      </DrawerBody>
-    </Drawer>
+    <React.Suspense fallback={<>{lang.loadingcomponent}..</>}>
+      <Drawer
+        open={props.isOpen}
+        onClose={props.toggleDrawer}
+        direction="left"
+        className="drawer-menu"
+      >
+        <DrawerHeader>
+          <InputSearch
+            required={true}
+            value={searchTitle}
+            onChange={(evt) => setSearchTitle(evt.target.value)}
+            onKeyPress={handleSearchDrawerData}
+            placeholder={lang.searchtitle}
+          />
+        </DrawerHeader>
+        <DrawerBody>
+          <section
+            style={{ position: "relative", width: "100%", height: "100%" }}
+          >
+            {loading ? (
+              <Loader />
+            ) : data.count > 0 ? (
+              data.items.map((item, index) => (
+                <Card
+                  openBin={() => props.handleOpenBin(item.key)}
+                  deleteBin={() => handleDeleteBin(item.key)}
+                  key={item.key}
+                  data={item}
+                />
+              ))
+            ) : (
+              <EmptyDb />
+            )}
+          </section>
+        </DrawerBody>
+      </Drawer>
+    </React.Suspense>
   );
 }

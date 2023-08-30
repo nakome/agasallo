@@ -4,6 +4,8 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import path from "path"; // Importa el módulo path
 import ejs from "ejs";
+import compression from 'compression'
+import cors from 'cors'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,7 +18,10 @@ import typescript from "typescript";
 const deta = Deta();
 const db = deta.Base("bins");
 const app = Express();
+
 app.use(Express.json());
+app.use(compression())
+app.use(cors())
 
 // Configurar el motor de plantillas EJS
 app.set("view engine", "ejs");
@@ -82,13 +87,14 @@ app.post("/md", async (req, res) => {
 app.get("/", async (req, res) => {
   try {
     const bins = await db.fetch();
-    bins.items.sort((a, b) => a.createdAt - b.createdAt);
+    bins.items.sort((a, b) => a.update_at - b.update_at);
     res.send({ success: true, data: bins });
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Get only one
  */
@@ -101,6 +107,7 @@ app.get("/:key", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Get only one
  */
@@ -115,6 +122,7 @@ app.get("/s/:name", async (req, res) => {
       { "create_at?contains": req.params.name.toLowerCase() },
     ];
     const bins = await db.fetch(queries);
+    bins.items.sort((a, b) => a.update_at - b.update_at);
     res.send({ success: true, data: bins });
   } catch (error) {
     console.error(error);
@@ -122,6 +130,7 @@ app.get("/s/:name", async (req, res) => {
   }
 });
 /**
+ *
  * Share code
  */
 app.get("/share/:key", async (req, res) => {
@@ -163,6 +172,7 @@ app.get("/share/:key", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Get only one
  */
@@ -206,6 +216,7 @@ app.get("/preview/:key", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Add new Bin
  */
@@ -232,6 +243,7 @@ app.post("/", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Update bin
  */
@@ -256,6 +268,7 @@ app.put("/:key", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
+
 /**
  * Delete existing todo
  */
@@ -352,9 +365,16 @@ function ejsToHtml(templateString, data) {
  * @returns {string}
  */
 function today() {
-  let t = new Date();
-  t.setDate(t.getDate());
-  return t.toISOString().split("T")[0];
+	const dateOb = new Date()
+	const date = ('0' + dateOb.getDate()).slice(-2)
+	const month = ('0' + (dateOb.getMonth() + 1)).slice(-2)
+	const year = dateOb.getFullYear()
+	const hours = dateOb.getHours()
+	const minutes = dateOb.getMinutes()
+	const seconds = dateOb.getSeconds()
+	const time = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + seconds
+
+  return time;
 }
 
 /**

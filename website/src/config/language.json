@@ -3,7 +3,7 @@
   "preview": "Preview",
   "editcode": "Edit Code",
   "delete": "Delete",
-  "lastupdate": "Last updated",
+  "lastupdate": "Updated",
   "coderemoved":"The code has been removed!",
   "coderemovederr":"Error on delete bin!",
   "areyousure":"Are you sure?",
@@ -25,5 +25,6 @@
   "publiccode":"Public code",
   "successsave":"The code has been created!",
   "successupdated":"The code has been updated!",
-  "errorupdated":"Ups, error on updated!"
+  "errorupdated":"Ups, error on updated!",
+  "loadingcomponent":"Loading component..."
 }

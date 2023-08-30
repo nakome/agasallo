@@ -10,6 +10,8 @@
   "author": "Deta",
   "license": "MIT",
   "dependencies": {
+    "compresion": "^1.7.11",
+    "cors": "^2.8.5",
     "deta": "^1.1.0",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",

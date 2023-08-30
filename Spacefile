@@ -18,3 +18,9 @@ micros:
     dev: npm run dev
     public_routes:
       - "/share/*"
+      - "/ejs/*"
+      - "/ts/*"
+      - "/scss/*"
+      - "/md/*"
+    presets:
+      api_keys: true

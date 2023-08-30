@@ -15,11 +15,11 @@ import {
   HeaderRight,
   MainContent,
 } from "./components/Bones";
-import ModalView from "./components/ModalView";
+
+
 import { Input, Textarea, Button, Switch } from "./components/Forms";
 import { Loader } from "./components/Loader";
-import CodeBlock from "./components/Code";
-import DrawerContainer from "./components/DrawerContainer";
+
 // Api
 import { GetDataKey } from "./api/GetData";
 import { CreateNewBin, UpdateBin } from "./api/PostData";
@@ -27,6 +27,12 @@ import { CreateNewBin, UpdateBin } from "./api/PostData";
 import { today } from "./utils/Date";
 // Language
 import lang from "./config/language.json";
+
+const ModalView = React.lazy(() => import("./components/ModalView"));
+const DrawerContainer = React.lazy(() => import("./components/DrawerContainer"));
+const CodeBlock = React.lazy(() => import("./components/Code"));
+
+
 // App
 export default function App() {
   const [key, setKey] = React.useState("");
@@ -159,7 +165,7 @@ export default function App() {
     const request = await CreateNewBin(arr);
     if (request.success) {
       // Show info
-      toast.success(lang.sucesssave, {
+      toast.success(lang.successsave, {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
       // clear inputs
