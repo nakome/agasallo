@@ -218,7 +218,7 @@ export default function App() {
       toast.error(lang.errorupdated);
     }
   }
-  return (<React.Suspense fallback={<>{lang.loadingcomponent}</>}>
+  return (<React.Suspense fallback={<Loader/>}>
     <MainApp>
       <Header>
         <HeaderLeft>
