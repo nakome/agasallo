@@ -86,6 +86,8 @@ export default function DrawerContainer(props) {
       >
         <DrawerHeader>
           <InputSearch
+            id="Search"
+            name="Search"
             required={true}
             value={searchTitle}
             onChange={(evt) => setSearchTitle(evt.target.value)}

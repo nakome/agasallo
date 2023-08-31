@@ -226,6 +226,8 @@ export default function App() {
             <BiMenu />
           </Button>
           <Input
+            name="title"
+            id="title"
             required={true}
             type="text"
             value={title}
@@ -285,6 +287,7 @@ export default function App() {
               ref={refVertSplit}
             >
               <CodeBlock
+                name="htmlfield"
                 active={isExpanded}
                 expand={() => toggleCollapseBlocks(0)}
                 content={htmlContent}
@@ -294,6 +297,7 @@ export default function App() {
                 values={["html", "markdown"]}
               />
               <CodeBlock
+                name="cssfield"
                 active={isExpanded}
                 expand={() => toggleCollapseBlocks(1)}
                 content={cssContent}
@@ -303,6 +307,7 @@ export default function App() {
                 values={["css", "sass"]}
               />
               <CodeBlock
+                name="jsfield"
                 active={isExpanded}
                 expand={() => toggleCollapseBlocks(2)}
                 content={jsContent}
@@ -341,6 +346,8 @@ export default function App() {
         >
           <Textarea
             required={false}
+            name="cssLinks"
+            id="cssLinksid"
             className="no-resize"
             error={cssLinks.length > 150 ? "error" : ""}
             onChange={(e) => setCssLinks(e.target.value)}
@@ -352,6 +359,8 @@ export default function App() {
           <Textarea
             required={false}
             className="no-resize"
+            name="jsLinks"
+            id="jsLinksid"
             error={jsLinks.length > 150 ? "error" : ""}
             onChange={(e) => setJsLinks(e.target.value)}
             placeholder={lang.putyourlinks}
@@ -360,6 +369,7 @@ export default function App() {
             style={{ height: "7rem" }}
           />
           <Switch
+            name="public"
             ischecked={isPublic ? "on" : "off"}
             value={isPublic}
             onChange={() => setPublic(!isPublic)}

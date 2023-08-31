@@ -35,7 +35,7 @@ export const InputSearch = (props) => <input type="search" {...props} />;
  */
 export const Textarea = (props) => (
   <div className="form-group">
-    {props.label ? <label>{props.label}</label> : ""}
+    {props.label ? <label htmlFor={props.id}>{props.label}</label> : ""}
     <textarea {...props} />
   </div>
 );
@@ -63,9 +63,9 @@ export const Switch = (props) => (
   <div className="switch-form">
     <label className="switch">
       {props.ischecked === "on" ? (
-        <input type="checkbox" checked={true} onChange={props.onChange} />
+        <input type="checkbox" name="public" id="switch-public" checked={true} onChange={props.onChange} />
       ) : (
-        <input type="checkbox" onChange={props.onChange} />
+        <input type="checkbox" name="public" id="switch-public" onChange={props.onChange} />
       )}
       <span className="slider round" />
     </label>{" "}
@@ -80,8 +80,8 @@ export const Switch = (props) => (
  */
 export const Select = (props) => (
   <div className="form-group">
-    {props.label ? <label>{props.label}</label> : ""}
-    <select {...props}>
+    {props.label ? <label htmlFor={props.id}>{props.label}</label> : ""}
+    <select {...props} name={props.name}>
       {props.values.map((item, index) => (
         <option key={`id_${index}`} value={item.toLowerCase()}>
           {item}

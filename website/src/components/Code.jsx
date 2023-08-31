@@ -17,6 +17,8 @@ export default function CodeBlock(props) {
     <div className="code">
       <div className="code-header">
         <Select
+          name={props.name}
+          id={props.name}
           value={props.type}
           onChange={props.setType}
           values={props.values}

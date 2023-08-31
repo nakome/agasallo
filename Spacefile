@@ -22,5 +22,6 @@ micros:
       - "/ts/*"
       - "/scss/*"
       - "/md/*"
+      - "/assets/icons.json"
     presets:
       api_keys: true
