@@ -62,6 +62,5 @@ export default function ModalView(props) {
         </ModalHeader>
         <ModalMainContent>{props.children}</ModalMainContent>
       </Modal>
-    </React.Fragment>
-  );
+    </React.Fragment>);
 }

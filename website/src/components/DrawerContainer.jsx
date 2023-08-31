@@ -78,7 +78,6 @@ export default function DrawerContainer(props) {
   }
 
   return (
-    <React.Suspense fallback={<>{lang.loadingcomponent}..</>}>
       <Drawer
         open={props.isOpen}
         onClose={props.toggleDrawer}
@@ -115,6 +114,5 @@ export default function DrawerContainer(props) {
           </section>
         </DrawerBody>
       </Drawer>
-    </React.Suspense>
   );
 }

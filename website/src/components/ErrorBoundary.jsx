@@ -1,5 +1,7 @@
 import React from "react";
 
+import lang from "../config/language.json";
+
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);

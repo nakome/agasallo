@@ -14,7 +14,6 @@ import lang from "../config/language.json";
 
 export default function CodeBlock(props) {
   return (
-  <React.Suspense fallback={<>{lang.loadingcomponent}..</>}>
     <div className="code">
       <div className="code-header">
         <Select
@@ -27,15 +26,14 @@ export default function CodeBlock(props) {
         </Button>
       </div>
       <div className="code-body">
-        <CodeMirror
-          value={props.content}
-          height="100%"
-          extensions={[loadLanguage(props.type)]}
-          theme={aura}
-          onChange={props.setContent}
-        />
+          <CodeMirror
+            value={props.content}
+            height="100%"
+            extensions={[loadLanguage(props.type)]}
+            theme={aura}
+            onChange={props.setContent}
+          />
       </div>
     </div>
-  </React.Suspense>
   );
 }

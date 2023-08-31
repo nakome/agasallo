@@ -4,14 +4,18 @@ import * as ReactDOM from "react-dom/client";
 import "normalize.css";
 import "./index.css";
 
-import ErrorBoundary from "./components/ErrorBoundary";
+import { Loader } from "./components/Loader";
 
-const App = React.lazy(() => import('./App'))
+// Error
+const ErrorBoundary = React.lazy(() => import("./components/ErrorBoundary"));
+const App = React.lazy(() => import("./App"))
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
+    <React.Suspense fallback={<Loader/>}>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </React.Suspense>
   </React.StrictMode>
 );

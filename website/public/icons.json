@@ -1,0 +1,18 @@
+{
+  "name":"Agasallo",
+  "short_name":"Agasallo",
+  "description":"Html editor with steroids",
+  "display":"fullscreen",
+  "theme_color":"#11141d",
+  "background_color":"#1e202b",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url":"/",
+  "lang": "en",
+  "dir": "ltr",
+  "display_override": ["window-controls-overlay"],
+  "icons": [
+    { "src": "./192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "./512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}

@@ -3,7 +3,14 @@ import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // https://react-icons.github.io/react-icons/icons?name=bi
-import { BiSave, BiPlus, BiCog, BiMenu, BiSolidSave,BiRocket } from "react-icons/bi";
+import {
+  BiSave,
+  BiPlus,
+  BiCog,
+  BiMenu,
+  BiSolidSave,
+  BiRocket,
+} from "react-icons/bi";
 //https://split.js.org/
 import Split from "react-split";
 // Components
@@ -16,10 +23,8 @@ import {
   MainContent,
 } from "./components/Bones";
 
-
 import { Input, Textarea, Button, Switch } from "./components/Forms";
 import { Loader } from "./components/Loader";
-
 // Api
 import { GetDataKey } from "./api/GetData";
 import { CreateNewBin, UpdateBin } from "./api/PostData";
@@ -29,14 +34,15 @@ import { today } from "./utils/Date";
 import lang from "./config/language.json";
 
 const ModalView = React.lazy(() => import("./components/ModalView"));
-const DrawerContainer = React.lazy(() => import("./components/DrawerContainer"));
+const DrawerContainer = React.lazy(() =>
+  import("./components/DrawerContainer")
+);
 const CodeBlock = React.lazy(() => import("./components/Code"));
-
 
 // App
 export default function App() {
   const [key, setKey] = React.useState("");
-  const [title, setTitle] = React.useState("Untitled "+today());
+  const [title, setTitle] = React.useState("Untitled " + today());
   const [isPublic, setPublic] = React.useState(false);
   const [created, setCreated] = React.useState("");
   const [cssLinks, setCssLinks] = React.useState("");
@@ -61,7 +67,8 @@ export default function App() {
   const refIframe = React.useRef(null);
   const refVertSplit = React.useRef(null);
   // Modal and drawer handlers
-  const toggleModalSettings = () => setIsOpenSettings((prevState) => !prevState);
+  const toggleModalSettings = () =>
+    setIsOpenSettings((prevState) => !prevState);
   // On toggle drawer load code
   const toggleDrawer = () => setIsOpen((prevState) => !prevState);
   // Collapse blocks
@@ -87,7 +94,7 @@ export default function App() {
   };
   // On press Ctrl+s save data
   const saveDataOnKeyPress = (event) => {
-    if (event.ctrlKey && event.key === "s") {
+    if ((event.ctrlKey && event.key === "s") || event.key === "Enter") {
       event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
       if (isNew) {
         handleCreateNewCode();
@@ -211,7 +218,7 @@ export default function App() {
       toast.error(lang.errorupdated);
     }
   }
-  return (
+  return (<React.Suspense fallback={<>{lang.loadingcomponent}</>}>
     <MainApp>
       <Header>
         <HeaderLeft>
@@ -224,6 +231,7 @@ export default function App() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={lang.title}
+            onKeyDown={saveDataOnKeyPress}
           />
         </HeaderLeft>
         <HeaderCenter>
@@ -249,8 +257,14 @@ export default function App() {
           <Button onClick={toggleModalSettings} title={lang.modalsettings}>
             <BiCog />
           </Button>
-          <a rel="noopener" target="_blank" className="button" href="https://monchovarela.es" title={lang.aboutus}>
-            <BiRocket/>
+          <a
+            rel="noopener"
+            target="_blank"
+            className="button"
+            href="https://monchovarela.es"
+            title={lang.aboutus}
+          >
+            <BiRocket />
           </a>
         </HeaderRight>
       </Header>
@@ -295,7 +309,7 @@ export default function App() {
                 setContent={(value, viewUpdate) => setJsContent(value)}
                 type={jsContentType || "javascript"}
                 setType={(evt) => setJsContentType(evt.target.value)}
-                values={["javascript","typescript"]}
+                values={["javascript", "typescript"]}
               />
             </Split>
           </div>
@@ -303,52 +317,56 @@ export default function App() {
             {refresh ? (
               <Loader />
             ) : loadingFrame ? (
-              <iframe title={lang.preview} src={iframSrc} ref={refIframe}></iframe>
+              <iframe
+                title={lang.preview}
+                src={iframSrc}
+                ref={refIframe}
+              ></iframe>
             ) : (
               <section className="infoFrame">{lang.infoframe}</section>
             )}
           </div>
         </Split>
       </MainContent>
-      <DrawerContainer
-        isOpen={isOpen}
-        toggleDrawer={toggleDrawer}
-        handleOpenBin={handleOpenBin}
-      />
-      <ModalView
-        title={lang.settings}
-        height={27}
-        active={isOpenSettings}
-        closeModal={toggleModalSettings}
-      >
-        <Textarea
-          required={false}
-          className="no-resize"
-          error={cssLinks.length > 150 ? "error" : ""}
-          onChange={(e) => setCssLinks(e.target.value)}
-          placeholder={lang.putyourlinks}
-          value={cssLinks}
-          label={lang.csslinks}
-          style={{ height: "7rem" }}
+        <DrawerContainer
+          isOpen={isOpen}
+          toggleDrawer={toggleDrawer}
+          handleOpenBin={handleOpenBin}
         />
-        <Textarea
-          required={false}
-          className="no-resize"
-          error={jsLinks.length > 150 ? "error" : ""}
-          onChange={(e) => setJsLinks(e.target.value)}
-          placeholder={lang.putyourlinks}
-          value={jsLinks}
-          label={lang.jslinks}
-          style={{ height: "7rem" }}
-        />
-        <Switch
-          ischecked={isPublic ? "on" : "off"}
-          value={isPublic}
-          onChange={() => setPublic(!isPublic)}
-          title={lang.publiccode}
-        />
-      </ModalView>
+        <ModalView
+          title={lang.settings}
+          height={27}
+          active={isOpenSettings}
+          closeModal={toggleModalSettings}
+        >
+          <Textarea
+            required={false}
+            className="no-resize"
+            error={cssLinks.length > 150 ? "error" : ""}
+            onChange={(e) => setCssLinks(e.target.value)}
+            placeholder={lang.putyourlinks}
+            value={cssLinks}
+            label={lang.csslinks}
+            style={{ height: "7rem" }}
+          />
+          <Textarea
+            required={false}
+            className="no-resize"
+            error={jsLinks.length > 150 ? "error" : ""}
+            onChange={(e) => setJsLinks(e.target.value)}
+            placeholder={lang.putyourlinks}
+            value={jsLinks}
+            label={lang.jslinks}
+            style={{ height: "7rem" }}
+          />
+          <Switch
+            ischecked={isPublic ? "on" : "off"}
+            value={isPublic}
+            onChange={() => setPublic(!isPublic)}
+            title={lang.publiccode}
+          />
+        </ModalView>
       <ToastContainer theme="dark" />
     </MainApp>
-  );
+  </React.Suspense>);
 }
