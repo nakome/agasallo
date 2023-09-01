@@ -6,6 +6,7 @@ micros:
     src: website
     engine: static
     primary: true
+    public: true
     serve: dist
     dev: npm run dev -- --port $PORT
     commands:
@@ -22,6 +23,4 @@ micros:
       - "/ts/*"
       - "/scss/*"
       - "/md/*"
-      - "/assets/icons.json"
-    presets:
-      api_keys: true
+      - "/icons/*"

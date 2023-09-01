@@ -94,7 +94,18 @@ export default function App() {
   };
   // On press Ctrl+s save data
   const saveDataOnKeyPress = (event) => {
-    if ((event.ctrlKey && event.key === "s") || event.key === "Enter") {
+    if (event.ctrlKey && event.key === "s") {
+      event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
+      if (isNew) {
+        handleCreateNewCode();
+      } else {
+        handleUpdateCode();
+      }
+    }
+  };
+  // On press Ctrl+s save data
+  const saveDataOnKeyPressTitle = (event) => {
+    if (event.key === "Enter") {
       event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
       if (isNew) {
         handleCreateNewCode();
@@ -218,121 +229,122 @@ export default function App() {
       toast.error(lang.errorupdated);
     }
   }
-  return (<React.Suspense fallback={<Loader/>}>
-    <MainApp>
-      <Header>
-        <HeaderLeft>
-          <Button onClick={toggleDrawer} title={lang.openmenu}>
-            <BiMenu />
-          </Button>
-          <Input
-            name="title"
-            id="title"
-            required={true}
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={lang.title}
-            onKeyDown={saveDataOnKeyPress}
-          />
-        </HeaderLeft>
-        <HeaderCenter>
-          <h3>{lang.appname}</h3>
-        </HeaderCenter>
-        <HeaderRight>
-          <Button onClick={toggleToNewCode} title={lang.createnew}>
-            <BiPlus />
-          </Button>
-          {isNew ? (
-            <Button
-              title={lang.savenew}
-              className="button-warning"
-              onClick={handleCreateNewCode}
-            >
-              <BiSolidSave />
+  return (
+    <React.Suspense fallback={<Loader />}>
+      <MainApp>
+        <Header>
+          <HeaderLeft>
+            <Button onClick={toggleDrawer} title={lang.openmenu}>
+              <BiMenu />
             </Button>
-          ) : (
-            <Button title={lang.updatecode} onClick={handleUpdateCode}>
-              <BiSave />
+            <Input
+              name="title"
+              id="title"
+              required={true}
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder={lang.title}
+              onKeyDown={saveDataOnKeyPressTitle}
+            />
+          </HeaderLeft>
+          <HeaderCenter>
+            <h3>{lang.appname}</h3>
+          </HeaderCenter>
+          <HeaderRight>
+            <Button onClick={toggleToNewCode} title={lang.createnew}>
+              <BiPlus />
             </Button>
-          )}
-          <Button onClick={toggleModalSettings} title={lang.modalsettings}>
-            <BiCog />
-          </Button>
-          <a
-            rel="noopener"
-            target="_blank"
-            className="button"
-            href="https://monchovarela.es"
-            title={lang.aboutus}
-          >
-            <BiRocket />
-          </a>
-        </HeaderRight>
-      </Header>
-      <MainContent>
-        <Split
-          sizes={[50, 50]}
-          direction="horizontal"
-          className="split-horizontal"
-          minSize={1}
-          onKeyDown={saveDataOnKeyPress}
-        >
-          <div className="split-vertical">
-            <Split
-              sizes={[33.33, 33.33, 33.33]}
-              direction="vertical"
-              className="split-vertical-code"
-              minSize={1}
-              ref={refVertSplit}
-            >
-              <CodeBlock
-                name="htmlfield"
-                active={isExpanded}
-                expand={() => toggleCollapseBlocks(0)}
-                content={htmlContent}
-                setContent={(value, viewUpdate) => setHtmlContent(value)}
-                type={htmlContentType || "html"}
-                setType={(evt) => setHtmlContentType(evt.target.value)}
-                values={["html", "markdown"]}
-              />
-              <CodeBlock
-                name="cssfield"
-                active={isExpanded}
-                expand={() => toggleCollapseBlocks(1)}
-                content={cssContent}
-                setContent={(value, viewUpdate) => setCssContent(value)}
-                type={cssContentType || "css"}
-                setType={(evt) => setCssContentType(evt.target.value)}
-                values={["css", "sass"]}
-              />
-              <CodeBlock
-                name="jsfield"
-                active={isExpanded}
-                expand={() => toggleCollapseBlocks(2)}
-                content={jsContent}
-                setContent={(value, viewUpdate) => setJsContent(value)}
-                type={jsContentType || "javascript"}
-                setType={(evt) => setJsContentType(evt.target.value)}
-                values={["javascript", "typescript"]}
-              />
-            </Split>
-          </div>
-          <div className="split-vertical" style={{ position: "relative" }}>
-            {refresh ? (
-              <Loader />
-            ) : loadingFrame ? (
-              <iframe
-                title={lang.preview}
-                src={iframSrc}
-                ref={refIframe}
-              ></iframe>
+            {isNew ? (
+              <Button
+                title={lang.savenew}
+                className="button-warning"
+                onClick={handleCreateNewCode}
+              >
+                <BiSolidSave />
+              </Button>
             ) : (
-              <section className="infoFrame">{lang.infoframe}</section>
+              <Button title={lang.updatecode} onClick={handleUpdateCode}>
+                <BiSave />
+              </Button>
             )}
-          </div>
-        </Split>
-      </MainContent>
+            <Button onClick={toggleModalSettings} title={lang.modalsettings}>
+              <BiCog />
+            </Button>
+            <a
+              rel="noopener"
+              target="_blank"
+              className="button"
+              href="https://monchovarela.es"
+              title={lang.aboutus}
+            >
+              <BiRocket />
+            </a>
+          </HeaderRight>
+        </Header>
+        <MainContent>
+          <Split
+            sizes={[50, 50]}
+            direction="horizontal"
+            className="split-horizontal"
+            minSize={1}
+            onKeyDown={saveDataOnKeyPress}
+          >
+            <div className="split-vertical">
+              <Split
+                sizes={[33.33, 33.33, 33.33]}
+                direction="vertical"
+                className="split-vertical-code"
+                minSize={1}
+                ref={refVertSplit}
+              >
+                <CodeBlock
+                  name="htmlfield"
+                  active={isExpanded}
+                  expand={() => toggleCollapseBlocks(0)}
+                  content={htmlContent}
+                  setContent={(value, viewUpdate) => setHtmlContent(value)}
+                  type={htmlContentType || "html"}
+                  setType={(evt) => setHtmlContentType(evt.target.value)}
+                  values={["html", "markdown"]}
+                />
+                <CodeBlock
+                  name="cssfield"
+                  active={isExpanded}
+                  expand={() => toggleCollapseBlocks(1)}
+                  content={cssContent}
+                  setContent={(value, viewUpdate) => setCssContent(value)}
+                  type={cssContentType || "css"}
+                  setType={(evt) => setCssContentType(evt.target.value)}
+                  values={["css", "sass"]}
+                />
+                <CodeBlock
+                  name="jsfield"
+                  active={isExpanded}
+                  expand={() => toggleCollapseBlocks(2)}
+                  content={jsContent}
+                  setContent={(value, viewUpdate) => setJsContent(value)}
+                  type={jsContentType || "javascript"}
+                  setType={(evt) => setJsContentType(evt.target.value)}
+                  values={["javascript", "typescript"]}
+                />
+              </Split>
+            </div>
+            <div className="split-vertical" style={{ position: "relative" }}>
+              {refresh ? (
+                <Loader />
+              ) : loadingFrame ? (
+                <iframe
+                  title={lang.preview}
+                  src={iframSrc}
+                  ref={refIframe}
+                ></iframe>
+              ) : (
+                <section className="infoFrame">{lang.infoframe}</section>
+              )}
+            </div>
+          </Split>
+        </MainContent>
         <DrawerContainer
           isOpen={isOpen}
           toggleDrawer={toggleDrawer}
@@ -376,7 +388,8 @@ export default function App() {
             title={lang.publiccode}
           />
         </ModalView>
-      <ToastContainer theme="dark" />
-    </MainApp>
-  </React.Suspense>);
+        <ToastContainer theme="dark" />
+      </MainApp>
+    </React.Suspense>
+  );
 }

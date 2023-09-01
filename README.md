@@ -19,7 +19,7 @@ const tpl = `
   <p><%= content %></p>
 `;
 
-let url = "/api/ejs";
+let url = "/api/convert/to/ejs";
 let options = {
   method: "POST",
   body: JSON.stringify({template:tpl,data:data}),
@@ -42,7 +42,7 @@ body{
 }
 `;
 
-let url = "/api/scss";
+let url = "/api/convert/to/scss";
 let options = {
   method: "POST",
   body: JSON.stringify({css_code: data}),
@@ -63,7 +63,7 @@ const data = `
 # hola mundo
 `;
 
-let url = "/api/md";
+let url = "/api/convert/to/md";
 let options = {
   method: "POST",
   body: JSON.stringify({html_code: data}),
@@ -85,7 +85,7 @@ let hola: string = "hola";
 console.log(hola)
 `;
 
-let url = "/api/ts";
+let url = "/api/convert/to/ts";
 let options = {
   method: "POST",
   body: JSON.stringify({js_code: data}),
