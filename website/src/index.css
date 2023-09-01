@@ -10,7 +10,7 @@
   --fontWeight: 300;
   --fontFamily: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   --lineHeight: 1.5;
-  --borderRadius: 4px;
+  --borderRadius: 0;
   --padding: 5px 10px;
   --defaultHeight: 50px;
   --letterSpacing: 1px;
@@ -171,8 +171,7 @@ iframe {
 }
 
 .form-group label {
-  color: var(--info);
-  text-shadow: 1px 1px 1px var(--dark);
+  color: var(--light);
   font-weight: bold;
 }
 
@@ -222,11 +221,11 @@ textarea {
   background: var(--primary);
   border: 2px solid var(--primary);
   color: var(--light);
-  border-radius: 3px;
+  border-radius: 0;
   resize: none;
   box-shadow: 0px 1px 2px var(--dark);
-  margin-bottom: 15px;
-  min-height: 45px;
+  margin-bottom: 0;
+  min-height: 47px;
 }
 
 textarea[name="description"] {
@@ -284,6 +283,12 @@ input[type=submit] {
   background: var(--primary) !important;
   color: var(--light) !important;
   transition: background 0.5s ease, border 0.8s ease, color 1s ease;
+}
+.button.button-close {
+  background: var(--primary);
+  color: var(--danger);
+  border-color: var(--primary);
+  transition: none;
 }
 
 .button-default:is(:hover, :focus, :active) {
@@ -669,7 +674,6 @@ details .details-body {
 .app-header {
   align-items: center;
   background: var(--primary);
-  border-bottom: 4px solid var(--info);
   display: flex;
   flex-direction: row;
   height: var(--defaultHeight);
@@ -792,6 +796,7 @@ details .details-body {
 .app-header button:is(:hover, :focus, :active),
 .app-header a:is(:hover, :focus, :active) {
   border-color: var(--warning);
+  color: var(--warning);
   transition: all .5s ease
 }
 
@@ -841,12 +846,10 @@ details .details-body {
 }
 
 .gutter.gutter-horizontal {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==);
   cursor: col-resize
 }
 
 .gutter.gutter-vertical {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
   cursor: row-resize;
 }
 
@@ -896,7 +899,6 @@ details .details-body {
   opacity: 0;
   z-index: 101;
   visibility: hidden;
-  transition: opacity 500ms ease;
 }
 
 /* Cambiamos a 1 columna */
@@ -910,7 +912,6 @@ details .details-body {
 .modal-active {
   opacity: 1;
   visibility: visible;
-  transition: opacity 500ms ease;
 }
 
 .modal-header {
@@ -988,8 +989,7 @@ details .details-body {
 
 .code-header {
   height: 32px;
-  background: var(--primary);
-  border-bottom: 2px solid var(--dark);
+  background: var(--secondary);
   display: flex;
   justify-content: space-between;
   line-height: 32px;
@@ -1000,9 +1000,19 @@ details .details-body {
 }
 
 .code-header select {
+  background: var(--secondary);
+  border: 1px solid var(--secondary);
+  box-shadow: none;
   min-height: auto;
   padding: 2px;
   margin: 2px 0;
+  height: 30px;
+  line-height: 30px;
+  text-transform: capitalize;
+}
+.code-header select:focus{
+  background: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .code-header a,
@@ -1012,8 +1022,8 @@ details .details-body {
   align-items: center;
   padding: 0;
   margin: 1px;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 30px;
   background: var(--secondary);
   border: 1px solid var(--secondary);
   color: var(--light);
@@ -1023,9 +1033,13 @@ details .details-body {
 .code-header button:is(:hover, :focus, :active),
 .code-header a:is(:hover, :focus, :active) {
   border-color: var(--warning);
+  color: var(--warning);
   transition: all .5s ease
 }
 
+.code-header-right{
+  display: flex;
+}
 .code-body {
   height: calc(100% - 32px);
   width: 100%;

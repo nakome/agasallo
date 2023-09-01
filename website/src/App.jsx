@@ -9,7 +9,7 @@ import {
   BiCog,
   BiMenu,
   BiSolidSave,
-  BiRocket,
+  BiLogoGithub,
 } from "react-icons/bi";
 //https://split.js.org/
 import Split from "react-split";
@@ -275,10 +275,10 @@ export default function App() {
               rel="noopener"
               target="_blank"
               className="button"
-              href="https://monchovarela.es"
-              title={lang.aboutus}
+              href="https://github.com/nakome/agasallo"
+              title="Github"
             >
-              <BiRocket />
+              <BiLogoGithub />
             </a>
           </HeaderRight>
         </Header>

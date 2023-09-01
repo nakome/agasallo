@@ -57,7 +57,7 @@ export default function ModalView(props) {
           </ModalHeaderLeft>
           <ModalHeaderCenter></ModalHeaderCenter>
           <ModalHeaderRight>
-            <Button className="button button-danger" onClick={props.closeModal}><BiX /></Button>
+            <Button className="button button-close" onClick={props.closeModal}><BiX /></Button>
           </ModalHeaderRight>
         </ModalHeader>
         <ModalMainContent>{props.children}</ModalMainContent>

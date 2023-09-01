@@ -9,9 +9,6 @@ import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { Button,Select } from "./Forms";
 
-// language
-import lang from "../config/language.json";
-
 export default function CodeBlock(props) {
   return (
     <div className="code">
@@ -23,9 +20,11 @@ export default function CodeBlock(props) {
           onChange={props.setType}
           values={props.values}
         />
-        <Button onClick={props.expand}>
-            {props.active ? (<BiExpand />) : <BiCollapse />}
-        </Button>
+        <div className="code-header-right">
+          <Button onClick={props.expand}>
+              {props.active ? (<BiExpand />) : <BiCollapse />}
+          </Button>
+        </div>
       </div>
       <div className="code-body">
           <CodeMirror
