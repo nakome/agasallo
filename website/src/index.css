@@ -12,8 +12,8 @@
   --lineHeight: 1.5;
   --borderRadius: 0;
   --padding: 5px 10px;
-  --defaultHeight: 50px;
-  --letterSpacing: 1px;
+  --defaultHeight: 46px;
+  --letterSpacing: 0.5px;
   --media: 768px;
 }
 
@@ -158,8 +158,7 @@ iframe {
 }
 
 .switch-form span {
-  color: var(--warning);
-  font-size: calc(var(--fontSize) - 3px);
+  color: var(--light);
   padding-top: 0;
   padding-left: 10px;
 }
@@ -287,6 +286,10 @@ input[type=submit] {
 .button.button-close {
   background: var(--primary);
   color: var(--danger);
+  border-color: var(--primary);
+  transition: none;
+}
+.button.button-close:is(:hover, :focus, :active) {
   border-color: var(--primary);
   transition: none;
 }
@@ -917,13 +920,11 @@ details .details-body {
 .modal-header {
   align-items: center;
   background: var(--primary);
-  border-bottom: 4px solid var(--info);
   display: flex;
   flex-direction: row;
   height: var(--defaultHeight);
   justify-content: space-between;
   padding: 2px;
-  -webkit-user-select: none;
   user-select: none;
   color: var(--light);
 }
@@ -943,9 +944,10 @@ details .details-body {
 .modal-header-title {
   padding: 5px;
   font-size: var(--fontSize);
-  font-weight: var(--fontWeight);
+  font-weight: bold;
   line-height: var(--lineHeight);
-  color: var(--warning);
+  color: var(--light);
+  margin-left: 10px;
 }
 
 .modal-header-right {
@@ -977,7 +979,7 @@ details .details-body {
 .modal-main-content {
   padding: 10px;
   overflow: auto;
-  height: calc(100% - 51px);
+  height: calc(100% - 47px);
 }
 
 /** - Code
