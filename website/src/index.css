@@ -1039,6 +1039,11 @@ details .details-body {
   transition: all .5s ease
 }
 
+.code-header button.button-active {
+  background: var(--warning);
+  color: var(--primary);
+}
+
 .code-header-right{
   display: flex;
 }

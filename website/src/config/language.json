@@ -26,5 +26,11 @@
   "successsave":"The code has been created!",
   "successupdated":"The code has been updated!",
   "errorupdated":"Ups, error on updated!",
-  "loadingcomponent":"Loading components..."
+  "loading":"Loading...",
+  "loadingcomponent":"Loading components...",
+  "convertcode":"Convert code",
+  "expandblock":"Expand block",
+  "selectmdfirst": "If you need convert to Markdown\rselect Markdown type first.",
+  "selectsassfirst": "If you need convert to Sass\rselect Sass type first.",
+  "selecttsfirst": "If you need convert to Typescript\rselect Typescript type first."
 }
