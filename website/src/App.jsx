@@ -41,36 +41,45 @@ const CodeBlock = React.lazy(() => import("./components/Code"));
 
 // App
 export default function App() {
-  const [key, setKey] = React.useState("");
-  const [title, setTitle] = React.useState("Untitled " + today());
-  const [isPublic, setPublic] = React.useState(false);
-  const [created, setCreated] = React.useState("");
-  const [cssLinks, setCssLinks] = React.useState("");
-  const [jsLinks, setJsLinks] = React.useState("");
-  const [htmlContent, setHtmlContent] = React.useState("");
-  const [cssContent, setCssContent] = React.useState("");
-  const [jsContent, setJsContent] = React.useState("");
-  const [htmlContentType, setHtmlContentType] = React.useState("html");
-  const [jsContentType, setJsContentType] = React.useState("javascript");
-  const [cssContentType, setCssContentType] = React.useState("css");
+
+  const [bin,setBin] = React.useState({
+    key: "",
+    title: `Unlited ${today()}`,
+    public: false,
+    created: "",
+    cssLinks: "",
+    jsLinks: "",
+    htmlContent: "",
+    cssContent:"",
+    jsContent: "",
+    htmlContentType: "html",
+    cssContentType: "css",
+    jsContentType: "javascript",
+  })
+
   // Check if is new code or if exists
   const [isNew, setIsNew] = React.useState(true);
+
   // Modal and drawer
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenSettings, setIsOpenSettings] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(true);
+
   // Frames
   const [iframSrc, setIframeUrl] = React.useState("");
   const [refresh, setRefresh] = React.useState(false);
   const [loadingFrame, setLoadingFrame] = React.useState(false);
+
   // Refs
   const refIframe = React.useRef(null);
   const refVertSplit = React.useRef(null);
+
   // Modal and drawer handlers
-  const toggleModalSettings = () =>
-    setIsOpenSettings((prevState) => !prevState);
+  const toggleModalSettings = () => setIsOpenSettings((prevState) => !prevState);
+
   // On toggle drawer load code
   const toggleDrawer = () => setIsOpen((prevState) => !prevState);
+
   // Collapse blocks
   const toggleCollapseBlocks = (num) => {
     setIsExpanded((prevState) => !prevState);
@@ -92,6 +101,7 @@ export default function App() {
         break;
     }
   };
+
   // On press Ctrl+s save data
   const saveDataOnKeyPress = (event) => {
     if (event.ctrlKey && event.key === "s") {
@@ -103,6 +113,8 @@ export default function App() {
       }
     }
   };
+
+
   // On press Ctrl+s save data
   const saveDataOnKeyPressTitle = (event) => {
     if (event.key === "Enter") {
@@ -114,104 +126,128 @@ export default function App() {
       }
     }
   };
+
+
   // Open bin
   const handleOpenBin = async (key) => {
     // hide drawer
     setIsOpen(false);
+    // refresh 
     setRefresh(true);
+    // get data bin
     const response = await GetDataKey(key);
     if (response.success) {
       let data = response.data;
-      // Set data
-      setKey(data.key);
-      setTitle(data.title || `Untitled ${today()}`);
-      setPublic(data.public || false);
-      setCssLinks(data.css_links || "");
-      setJsLinks(data.js_links || "");
-      setHtmlContent(data.html_code || "Empty Content");
-      setCssContent(data.css_code || "*{box-sizing:border-box}");
-      setJsContent(data.js_code || "console.log('ready')");
-      setHtmlContentType(data.html_type || "html");
-      setCssContentType(data.css_type || "css");
-      setJsContentType(data.js_type || "javascript");
-      setCreated(data.create_at || today());
+      let obj = {
+        key: data.key,
+        title: data.title || `Untitled ${today()}`,
+        public: data.public || false,
+        created: data.create_at || today(),
+        cssLinks: data.css_links || "",
+        jsLinks: data.js_links || "",
+        htmlContent: data.html_code || "Empty Content",
+        cssContent:data.css_code || "*{box-sizing:border-box}",
+        jsContent: data.js_code || "console.log('ready')",
+        htmlContentType: data.html_type || "html",
+        cssContentType: data.css_type || "css",
+        jsContentType: data.js_type || "javascript",
+      }
+
+      setBin((prevState) => {
+        return { ...prevState, ...obj };
+      });
+
       setLoadingFrame(true);
       setIsNew(false);
       setRefresh(false);
       setIframeUrl(`${location.origin}/api/preview/${data.key}`);
     }
   };
+
+
+
   // Toggle to new code
   const toggleToNewCode = () => {
     // Set data
-    setKey("");
-    setTitle(`Untitled ${today()}`);
-    setPublic(false);
-    setCssLinks("");
-    setJsLinks("");
-    setHtmlContent("<h1>Ready</h1>");
-    setCssContent("*{box-sizing:border-box;}");
-    setJsContent("console.log('ready')");
-    setHtmlContentType("html");
-    setCssContentType("css");
-    setJsContentType("javascript");
-    setCreated("");
+    let obj = {
+      key: "",
+      title: `Untitled ${today()}`,
+      public: false,
+      created: today(),
+      cssLinks: "",
+      jsLinks: "",
+      htmlContent: "Empty Content",
+      cssContent: "*{box-sizing:border-box}",
+      jsContent: "console.log('ready')",
+      htmlContentType: "html",
+      cssContentType: "css",
+      jsContentType: "javascript",
+    }
+
+    setBin((prevState) => {
+      return { ...prevState, ...obj };
+    });
+
     // hide drawer
     setIsOpen(false);
     setIsNew(true);
     setLoadingFrame(true);
     setIframeUrl("");
   };
+
+
   // Save New Modal
   async function handleCreateNewCode() {
     // Objects
-    let arr = {
-      title: title || `Untitled ${today()}`,
-      html_code: htmlContent,
-      html_type: htmlContentType,
-      css_code: cssContent,
-      css_type: cssContentType,
-      css_links: cssLinks,
-      js_code: jsContent,
-      js_type: jsContentType,
-      js_links: jsLinks,
-      public: isPublic,
+    let obj = {
+      title: bin.title || `Untitled ${today()}`,
+      html_code: bin.htmlContent,
+      html_type: bin.htmlContentType,
+      css_code: bin.cssContent,
+      css_type: bin.cssContentType,
+      css_links: bin.cssLinks,
+      js_code: bin.jsContent,
+      js_type: bin.jsContentType,
+      js_links: bin.jsLinks,
+      public: bin.public,
       create_at: today(),
       update_at: today(),
     };
 
-    const request = await CreateNewBin(arr);
+    const request = await CreateNewBin(obj);
     if (request.success) {
       // Show info
       toast.success(lang.successsave, {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
       // clear inputs
-      setTitle("");
+      updateBin("title","");
       setIsNew(false);
       handleOpenBin(request.data.key);
     }
   }
+
   // Save code
   async function handleUpdateCode() {
     // Objects
-    let arr = {
-      title: title || `Untitled ${today()}`,
-      html_code: htmlContent,
-      html_type: htmlContentType,
-      css_code: cssContent,
-      css_type: cssContentType,
-      css_links: cssLinks || "",
-      js_code: jsContent,
-      js_type: jsContentType,
-      js_links: jsLinks || "",
-      public: isPublic || false,
-      create_at: created,
+    let obj = {
+      title: bin.title || `Untitled ${today()}`,
+      html_code: bin.htmlContent,
+      html_type: bin.htmlContentType,
+      css_code: bin.cssContent,
+      css_type: bin.cssContentType,
+      css_links: bin.cssLinks || "",
+      js_code: bin.jsContent,
+      js_type: bin.jsContentType,
+      js_links: bin.jsLinks || "",
+      public: bin.public || false,
+      create_at: bin.created,
       update_at: today(),
     };
     // Update data
-    const request = await UpdateBin(key, arr);
+    const request = await UpdateBin(bin.key, obj);
     if (request.success) {
+      // refresh
       setRefresh(true);
       // Reload frame
       refIframe.current.contentWindow.location.reload(true);
@@ -221,6 +257,7 @@ export default function App() {
       });
       // Show preloader
       let w = setTimeout(() => {
+        // refresh
         setRefresh(false);
         clearTimeout(w);
       }, 800);
@@ -229,6 +266,15 @@ export default function App() {
       toast.error(lang.errorupdated);
     }
   }
+
+
+  function updateBin(name, val) {
+    setBin({
+      ...bin,
+      [name]: val
+    });
+  };
+
   return (
     <React.Suspense fallback={<Loader />}>
       <MainApp>
@@ -242,8 +288,8 @@ export default function App() {
               id="title"
               required={true}
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={bin.title}
+              onChange={(e) => updateBin("title",e.target.value)}
               placeholder={lang.title}
               onKeyDown={saveDataOnKeyPressTitle}
             />
@@ -302,30 +348,30 @@ export default function App() {
                   name="htmlfield"
                   active={isExpanded}
                   expand={() => toggleCollapseBlocks(0)}
-                  content={htmlContent}
-                  setContent={(value, viewUpdate) => setHtmlContent(value)}
-                  type={htmlContentType || "html"}
-                  setType={(evt) => setHtmlContentType(evt.target.value)}
+                  content={bin.htmlContent}
+                  setContent={(value, viewUpdate) => updateBin("htmlContent",value)}
+                  type={bin.htmlContentType || "html"}
+                  setType={(evt) => updateBin("htmlContentType",evt.target.value)}
                   values={["html", "markdown"]}
                 />
                 <CodeBlock
                   name="cssfield"
                   active={isExpanded}
                   expand={() => toggleCollapseBlocks(1)}
-                  content={cssContent}
-                  setContent={(value, viewUpdate) => setCssContent(value)}
-                  type={cssContentType || "css"}
-                  setType={(evt) => setCssContentType(evt.target.value)}
+                  content={bin.cssContent}
+                  setContent={(value, viewUpdate) => updateBin("cssContent",value)}
+                  type={bin.cssContentType || "css"}
+                  setType={(evt) => updateBin("cssContentType",evt.target.value)}
                   values={["css", "sass"]}
                 />
                 <CodeBlock
                   name="jsfield"
                   active={isExpanded}
                   expand={() => toggleCollapseBlocks(2)}
-                  content={jsContent}
-                  setContent={(value, viewUpdate) => setJsContent(value)}
-                  type={jsContentType || "javascript"}
-                  setType={(evt) => setJsContentType(evt.target.value)}
+                  content={bin.jsContent}
+                  setContent={(value, viewUpdate) => updateBin("jsContent",value)}
+                  type={bin.jsContentType || "javascript"}
+                  setType={(evt) => updateBin("jsContentType",evt.target.value)}
                   values={["javascript", "typescript"]}
                 />
               </Split>
@@ -361,10 +407,10 @@ export default function App() {
             name="cssLinks"
             id="cssLinksid"
             className="no-resize"
-            error={cssLinks.length > 150 ? "error" : ""}
-            onChange={(e) => setCssLinks(e.target.value)}
+            error={bin.cssLinks.length > 150 ? "error" : ""}
+            onChange={(e) => updateBin("cssLinks",e.target.value)}
             placeholder={lang.putyourlinks}
-            value={cssLinks}
+            value={bin.cssLinks}
             label={lang.csslinks}
             style={{ height: "7rem" }}
           />
@@ -373,18 +419,18 @@ export default function App() {
             className="no-resize"
             name="jsLinks"
             id="jsLinksid"
-            error={jsLinks.length > 150 ? "error" : ""}
-            onChange={(e) => setJsLinks(e.target.value)}
+            error={bin.jsLinks.length > 150 ? "error" : ""}
+            onChange={(e) => updateBin("jsLinks",e.target.value)}
             placeholder={lang.putyourlinks}
-            value={jsLinks}
+            value={bin.jsLinks}
             label={lang.jslinks}
             style={{ height: "7rem" }}
           />
           <Switch
             name="public"
-            ischecked={isPublic ? "on" : "off"}
-            value={isPublic}
-            onChange={() => setPublic(!isPublic)}
+            ischecked={bin.public ? "on" : "off"}
+            value={bin.public}
+            onChange={() => updateBin("public",!bin.public)}
             title={lang.publiccode}
           />
         </ModalView>
