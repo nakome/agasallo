@@ -849,10 +849,12 @@ details .details-body {
 }
 
 .gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAAXNSR0IArs4c6QAAACdJREFUKFNjbJ+49joDI+OtyrwgfxibEasgAxbAiFVw1MzR8MSblgAoFIefwdDOtwAAAABJRU5ErkJggg==');
   cursor: col-resize
 }
 
 .gutter.gutter-vertical {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAAAXNSR0IArs4c6QAAAC1JREFUKFNjbJ+49joDI+OtyrwgfwYGBgZ68RnpZRG6xxhBvhwIMHA+HqigBgB72pnmtvALQQAAAABJRU5ErkJggg==');
   cursor: row-resize;
 }
 
@@ -1093,6 +1095,6 @@ details .details-body {
 
 @media (max-width: 400px) {
   .app-header-left input[type="text"] {
-    min-width: 160px !important;
+    min-width: 142px !important;
   }
 }

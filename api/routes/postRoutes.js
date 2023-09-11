@@ -6,6 +6,7 @@ const deta = Deta();
 const db = deta.Base("bins");
 const app = Express();
 
+
 /**
  * Add new Bin
  */
@@ -68,6 +69,49 @@ app.delete("/:key", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, error });
+  }
+});
+
+/**
+ * Add new Bin
+ */
+app.post("/import/data", async (req, res) => {
+
+  const data = req.body;
+
+  // Is array ?
+  if (!Array.isArray(data)) {
+    return res.status(400).json({ status: 400, msg: 'Sorry, this is not Json file.' });
+  }
+
+  // Values you want to check in the array
+  const expectedValues = ["create_at","css_code","css_links","css_type","html_code","html_type","js_code","js_links","js_type","key","public","title","update_at"];
+
+  // Check if all objects in the array contain the expected values
+  const areValuesPresentInAllObjects = data.every(obj =>
+    expectedValues.every(key => obj.hasOwnProperty(key))
+  );
+
+  // If error show msg
+  if (!areValuesPresentInAllObjects) {
+    return res.status(400).json({ status: 400, msg: 'Some objects in the array do not contain expected values.' });
+  }
+
+  // Insert 25-by-25 objects
+  const groupOfElements = [];
+  for (let i = 0; i < data.length; i += 5) {
+    groupOfElements.push(data.slice(i, i + 5));
+  }
+
+  // Insert many
+  for (const group of groupOfElements) {
+    try {
+      await db.putMany([...group]);
+      return res.status(200).json({ status: 200, msg: 'Success on import data.',data: group});
+    } catch (error) {
+      console.error('Error al insertar elementos:', error);
+      return res.status(500).json({ status: 500, msg: 'Error al insertar elementos.' });
+    }
   }
 });
 

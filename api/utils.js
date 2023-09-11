@@ -38,7 +38,7 @@ export function toTypeScript(str) {
 export function toCss(str) {
   try {
     let scss = sass.compileString(str);
-    return { status: true, data: scss.css };
+    return { status: true, data: scss.css }
   } catch (error) {
     return { status: false, error: error };
   }
@@ -111,4 +111,102 @@ export function today() {
  */
 export function capitalize(str) {
   return str && str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+/**
+ * Check type and render
+ * @param {object} bin
+ * @returns
+ */
+export function checkTypeAndRender(bin) {
+  if (bin.html_type === "markdown") {
+    const output = toMd(bin.html_code);
+    if (output.status) {
+      bin.html_code = output.data;
+    } else {
+      bin.html_code += parseError(output.error);
+    }
+  }
+
+  if (bin.css_type === "sass") {
+    const output = toCss(bin.css_code);
+    if (output.status) {
+      bin.css_code = output.data;
+    } else {
+      bin.html_code += parseError(output.error);
+    }
+  }
+
+  if (bin.js_type === "typescript") {
+    const output = toTypeScript(bin.js_code);
+    if (output.status) {
+      bin.js_code = output.data;
+    } else {
+      bin.html_code += parseError(output.error);
+    }
+  }
+  return bin;
+}
+
+/**
+ * Parse Cdoe
+ * @param {obj} bin
+ * @param {string} type
+ * @returns
+ */
+export function parseCode(bin, type) {
+  let contentType, content;
+
+  switch (type) {
+    case "css":
+    case "sass":
+      contentType = "text/css";
+      content = bin.css_code;
+      break;
+    case "js":
+    case "typescript":
+    case "javascript":
+      contentType = "application/javascript";
+      content = bin.js_code;
+      break;
+    case "html":
+    case "markdown":
+    case "md":
+      contentType =
+        type === "md" || type === "markdown" ? "text/plain" : "text/html";
+      content = bin.html_code;
+      break;
+    default:
+      content = null;
+      break;
+  }
+
+  return [content, contentType];
+}
+
+/**
+ * Process Code
+ * @param {string} code
+ * @param {string} codeType
+ * @param {function} transformer
+ * @returns
+ */
+export function processCode(code, codeType, transformer) {
+  return code;
+}
+
+/**
+ * Compare 2 objects
+ * @param {string} a
+ * @param {string} b
+ * @returns
+ */
+export function compare(a, b) {
+  if (a.update_at < b.update_at) {
+    return 1;
+  }
+  if (a.update_at > b.update_at) {
+    return -1;
+  }
+  return 0;
 }

@@ -1,30 +1,13 @@
 import React from "react";
-//https://fkhadra.github.io/react-toastify/introduction
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// https://react-icons.github.io/react-icons/icons?name=bi
-import {
-  BiSave,
-  BiPlus,
-  BiCog,
-  BiMenu,
-  BiSolidSave,
-  BiLogoGithub,
-} from "react-icons/bi";
-//https://split.js.org/
 import Split from "react-split";
-// Components
-import {
-  MainApp,
-  Header,
-  HeaderLeft,
-  HeaderCenter,
-  HeaderRight,
-  MainContent,
-} from "./components/Bones";
 
-import { Input, Textarea, Button, Switch } from "./components/Forms";
-import { Loader } from "./components/Loader";
+// Components
+import { MainApp, MainContent } from "./ui/Bones";
+import { BinContext } from "./ui/Context";
+import { Loader } from "./ui/Loader";
 // Api
 import { GetDataKey } from "./api/GetData";
 import { CreateNewBin, UpdateBin } from "./api/PostData";
@@ -33,29 +16,35 @@ import { today } from "./utils/Date";
 // Language
 import lang from "./config/language.json";
 
-const ModalView = React.lazy(() => import("./components/ModalView"));
-const DrawerContainer = React.lazy(() =>
-  import("./components/DrawerContainer")
+// Lazy components
+const HeaderComponent = React.lazy(() =>
+  import("./components/HeaderConmponent")
 );
-const CodeBlock = React.lazy(() => import("./components/Code"));
+const DrawerComponent = React.lazy(() =>
+  import("./components/DrawerComponent")
+);
+const FrameComponent = React.lazy(() => import("./components/FrameComponent"));
+const ModalComponent = React.lazy(() => import("./components/ModalComponent"));
+const CodeBlock = React.lazy(() => import("./components/CodeBlockComponent"));
 
 // App
 export default function App() {
-
-  const [bin,setBin] = React.useState({
-    key: "",
-    title: `Unlited ${today()}`,
+  let arrayOfStates = {
+    key: "1234",
+    title: `Untitled ${today()}`,
     public: false,
-    created: "",
+    created: today(),
     cssLinks: "",
     jsLinks: "",
-    htmlContent: "",
-    cssContent:"",
-    jsContent: "",
+    htmlContent: "Empty Content",
+    cssContent: "*{box-sizing:border-box}",
+    jsContent: "console.log('ready')",
     htmlContentType: "html",
     cssContentType: "css",
     jsContentType: "javascript",
-  })
+  };
+
+  const [bin, setBin] = React.useState(arrayOfStates);
 
   // Check if is new code or if exists
   const [isNew, setIsNew] = React.useState(true);
@@ -72,67 +61,138 @@ export default function App() {
 
   // Refs
   const refIframe = React.useRef(null);
+  const refHorSplit = React.useRef(null)
   const refVertSplit = React.useRef(null);
 
+  const codeBlocks = [
+    {
+      key: bin.key,
+      public: bin.public,
+      name: "htmlfield",
+      active: isExpanded,
+      expand: () => toggleCollapseBlocks(0),
+      content: bin.htmlContent,
+      setContent: (value, viewUpdate) => updateBin("htmlContent", value),
+      type: bin.htmlContentType || "html",
+      setType: (evt) => updateBin("htmlContentType", evt.target.value),
+      values: ["html", "markdown"],
+    },
+    {
+      key: bin.key,
+      public: bin.public,
+      name: "cssfield",
+      active: isExpanded,
+      expand: () => toggleCollapseBlocks(1),
+      content: bin.cssContent,
+      setContent: (value, viewUpdate) => updateBin("cssContent", value),
+      type: bin.cssContentType || "css",
+      setType: (evt) => updateBin("cssContentType", evt.target.value),
+      values: ["css", "sass"],
+    },
+    {
+      key: bin.key,
+      public: bin.public,
+      name: "jsfield",
+      active: isExpanded,
+      expand: () => toggleCollapseBlocks(2),
+      content: bin.jsContent,
+      setContent: (value, viewUpdate) => updateBin("jsContent", value),
+      type: bin.jsContentType || "javascript",
+      setType: (evt) => updateBin("jsContentType", evt.target.value),
+      values: ["javascript", "typescript"],
+    },
+  ];
+
   // Modal and drawer handlers
-  const toggleModalSettings = () => setIsOpenSettings((prevState) => !prevState);
+  const toggleModalSettings = React.useCallback(() => {
+    setIsOpenSettings(!isOpenSettings);
+  }, [isOpenSettings]);
 
   // On toggle drawer load code
-  const toggleDrawer = () => setIsOpen((prevState) => !prevState);
+  const toggleDrawer = React.useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [isOpen]);
 
-  // Collapse blocks
-  const toggleCollapseBlocks = (num) => {
+  // On press Ctrl+s save data
+  const saveBinOnKeyPress = React.useCallback(
+    (event) => {
+      if (event.ctrlKey && event.key === "s") {
+        event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
+        createOrUpdate();
+      }
+    },
+    [createOrUpdate]
+  );
+
+  // On press Ctrl+enter save data
+  const saveBinOnKeyPressTitle = React.useCallback(
+    (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
+        createOrUpdate();
+      }
+    },
+    [createOrUpdate]
+  );
+
+  // If isNew create else update
+  function createOrUpdate() {
+    if (isNew) {
+      createHandler();
+    } else {
+      updateHandler();
+    }
+  }
+
+  // Toogle to new code
+  function toggleToNewCode() {
+    // Set the new data object as the current bin
+    setBin(arrayOfStates);
+
+    // Hide the drawer
+    setIsOpen(false);
+
+    // Set isNew to true to indicate that it's a new bin
+    setIsNew(true);
+
+    // Set loading frame to true
+    setLoadingFrame(true);
+
+    // Clear the iframe URL
+    setIframeUrl("");
+  }
+
+  // Toggle blocks
+  function toggleCollapseBlocks(num) {
     setIsExpanded((prevState) => !prevState);
+    let sizes = [33.33, 33.33, 33.33];
     switch (num) {
       case 0:
-        isExpanded
-          ? refVertSplit.current.split.setSizes([100, 0, 0])
-          : refVertSplit.current.split.setSizes([33.33, 33.33, 33.33]);
+        sizes = isExpanded ? [100, 0, 0] : [33.33, 33.33, 33.33];
         break;
       case 1:
-        isExpanded
-          ? refVertSplit.current.split.setSizes([0, 100, 0])
-          : refVertSplit.current.split.setSizes([33.33, 33.33, 33.33]);
+        sizes = isExpanded ? [0, 100, 0] : [33.33, 33.33, 33.33];
         break;
       case 2:
-        isExpanded
-          ? refVertSplit.current.split.setSizes([0, 0, 100])
-          : refVertSplit.current.split.setSizes([33.33, 33.33, 33.33]);
+        sizes = isExpanded ? [0, 0, 100] : [33.33, 33.33, 33.33];
         break;
     }
-  };
+    refVertSplit.current.split.setSizes(sizes);
+  }
 
-  // On press Ctrl+s save data
-  const saveDataOnKeyPress = (event) => {
-    if (event.ctrlKey && event.key === "s") {
-      event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
-      if (isNew) {
-        handleCreateNewCode();
-      } else {
-        handleUpdateCode();
-      }
-    }
-  };
+  // Update bin
+  function updateBin(name, val) {
+    setBin({
+      ...bin,
+      [name]: val,
+    });
+  }
 
-
-  // On press Ctrl+s save data
-  const saveDataOnKeyPressTitle = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
-      if (isNew) {
-        handleCreateNewCode();
-      } else {
-        handleUpdateCode();
-      }
-    }
-  };
-
-
-  // Open bin
-  const handleOpenBin = async (key) => {
+  // Open bin code
+  async function openHandler(key) {
     // hide drawer
     setIsOpen(false);
-    // refresh 
+    // refresh
     setRefresh(true);
     // get data bin
     const response = await GetDataKey(key);
@@ -146,61 +206,28 @@ export default function App() {
         cssLinks: data.css_links || "",
         jsLinks: data.js_links || "",
         htmlContent: data.html_code || "Empty Content",
-        cssContent:data.css_code || "*{box-sizing:border-box}",
+        cssContent: data.css_code || "*{box-sizing:border-box}",
         jsContent: data.js_code || "console.log('ready')",
         htmlContentType: data.html_type || "html",
         cssContentType: data.css_type || "css",
         jsContentType: data.js_type || "javascript",
-      }
-
-      setBin((prevState) => {
-        return { ...prevState, ...obj };
-      });
-
+      };
+      setBin(obj);
       setLoadingFrame(true);
       setIsNew(false);
       setRefresh(false);
       setIframeUrl(`${location.origin}/api/preview/${data.key}`);
     }
-  };
+  }
 
+  // Create new bin code
+  async function createHandler() {
+    // Get the current date
+    const currentDate = today();
 
-
-  // Toggle to new code
-  const toggleToNewCode = () => {
-    // Set data
-    let obj = {
-      key: "",
-      title: `Untitled ${today()}`,
-      public: false,
-      created: today(),
-      cssLinks: "",
-      jsLinks: "",
-      htmlContent: "Empty Content",
-      cssContent: "*{box-sizing:border-box}",
-      jsContent: "console.log('ready')",
-      htmlContentType: "html",
-      cssContentType: "css",
-      jsContentType: "javascript",
-    }
-
-    setBin((prevState) => {
-      return { ...prevState, ...obj };
-    });
-
-    // hide drawer
-    setIsOpen(false);
-    setIsNew(true);
-    setLoadingFrame(true);
-    setIframeUrl("");
-  };
-
-
-  // Save New Modal
-  async function handleCreateNewCode() {
-    // Objects
-    let obj = {
-      title: bin.title || `Untitled ${today()}`,
+    // Create an object with the data to save
+    const obj = {
+      title: bin.title || `Untitled ${currentDate}`,
       html_code: bin.htmlContent,
       html_type: bin.htmlContentType,
       css_code: bin.cssContent,
@@ -210,232 +237,148 @@ export default function App() {
       js_type: bin.jsContentType,
       js_links: bin.jsLinks,
       public: bin.public,
-      create_at: today(),
-      update_at: today(),
+      create_at: currentDate,
+      update_at: currentDate,
     };
 
+    // Save the data on the server
     const request = await CreateNewBin(obj);
+
+    // Check if the save was successful
     if (request.success) {
-      // Show info
+      // Show a success message
       toast.success(lang.successsave, {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
-      // clear inputs
-      updateBin("title","");
+
+      // Clear input values
+      updateBin("title", "");
+
+      // Set isNew to false
       setIsNew(false);
-      handleOpenBin(request.data.key);
+
+      // Open the newly created bin
+      openHandler(request.data.key);
     }
   }
 
-  // Save code
-  async function handleUpdateCode() {
-    // Objects
-    let obj = {
-      title: bin.title || `Untitled ${today()}`,
+  // Update bin code
+  async function updateHandler() {
+    // Get the current date
+    const currentDate = today();
+
+    // Create an object with the data to update
+    const obj = {
+      title: bin.title || `Untitled ${currentDate}`,
       html_code: bin.htmlContent,
       html_type: bin.htmlContentType,
       css_code: bin.cssContent,
       css_type: bin.cssContentType,
-      css_links: bin.cssLinks || "",
+      css_links: bin.cssLinks,
       js_code: bin.jsContent,
       js_type: bin.jsContentType,
-      js_links: bin.jsLinks || "",
-      public: bin.public || false,
-      create_at: bin.created,
-      update_at: today(),
+      js_links: bin.jsLinks,
+      public: bin.public,
+      create_at: bin.create_at,
+      update_at: currentDate,
     };
-    // Update data
+    // Update the data on the server
     const request = await UpdateBin(bin.key, obj);
+
+    // Check if the update was successful
     if (request.success) {
-      // refresh
+      // Activate the refresh indicator
       setRefresh(true);
-      // Reload frame
+      // Reload the iframe content
       refIframe.current.contentWindow.location.reload(true);
-      // Show info
-      toast.info(lang.successupdated, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-      });
-      // Show preloader
-      let w = setTimeout(() => {
-        // refresh
+      // Show a success message after a delay
+      setTimeout(() => {
+        // Deactivate the refresh indicator
         setRefresh(false);
-        clearTimeout(w);
+
+        // Show a success message
+        toast.info(lang.successupdated, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       }, 800);
     } else {
-      // Show info
+      // Show an error message in case of failure
       toast.error(lang.errorupdated);
     }
   }
 
-
-  function updateBin(name, val) {
-    setBin({
-      ...bin,
-      [name]: val
-    });
-  };
-
   return (
-    <React.Suspense fallback={<Loader />}>
-      <MainApp>
-        <Header>
-          <HeaderLeft>
-            <Button onClick={toggleDrawer} title={lang.openmenu}>
-              <BiMenu />
-            </Button>
-            <Input
-              name="title"
-              id="title"
-              required={true}
-              type="text"
-              value={bin.title}
-              onChange={(e) => updateBin("title",e.target.value)}
-              placeholder={lang.title}
-              onKeyDown={saveDataOnKeyPressTitle}
-            />
-          </HeaderLeft>
-          <HeaderCenter>
-            <h3>{lang.appname}</h3>
-          </HeaderCenter>
-          <HeaderRight>
-            <Button onClick={toggleToNewCode} title={lang.createnew}>
-              <BiPlus />
-            </Button>
-            {isNew ? (
-              <Button
-                title={lang.savenew}
-                className="button-warning"
-                onClick={handleCreateNewCode}
-              >
-                <BiSolidSave />
-              </Button>
-            ) : (
-              <Button title={lang.updatecode} onClick={handleUpdateCode}>
-                <BiSave />
-              </Button>
-            )}
-            <Button onClick={toggleModalSettings} title={lang.modalsettings}>
-              <BiCog />
-            </Button>
-            <a
-              rel="noopener"
-              target="_blank"
-              className="button"
-              href="https://github.com/nakome/agasallo"
-              title="Github"
+    <BinContext.Provider value={bin}>
+      <React.Suspense fallback={<Loader />}>
+        <MainApp>
+          <HeaderComponent
+            isNew={isNew}
+            toggleDrawer={toggleDrawer}
+            toggleToNewCode={toggleToNewCode}
+            saveDataOnKeyPressTitle={saveBinOnKeyPressTitle}
+            handleCreateNewCode={createHandler}
+            handleUpdateCode={updateHandler}
+            toggleModalSettings={toggleModalSettings}
+            updateBin={updateBin}
+          />
+
+          <MainContent>
+            <Split
+              sizes={[50, 50]}
+              direction="horizontal"
+              className="split-horizontal"
+              minSize={1}
+              onKeyDown={saveBinOnKeyPress}
+              ref={refHorSplit}
             >
-              <BiLogoGithub />
-            </a>
-          </HeaderRight>
-        </Header>
-        <MainContent>
-          <Split
-            sizes={[50, 50]}
-            direction="horizontal"
-            className="split-horizontal"
-            minSize={1}
-            onKeyDown={saveDataOnKeyPress}
-          >
-            <div className="split-vertical">
-              <Split
-                sizes={[33.33, 33.33, 33.33]}
-                direction="vertical"
-                className="split-vertical-code"
-                minSize={1}
-                ref={refVertSplit}
-              >
-                <CodeBlock
-                  name="htmlfield"
-                  active={isExpanded}
-                  expand={() => toggleCollapseBlocks(0)}
-                  content={bin.htmlContent}
-                  setContent={(value, viewUpdate) => updateBin("htmlContent",value)}
-                  type={bin.htmlContentType || "html"}
-                  setType={(evt) => updateBin("htmlContentType",evt.target.value)}
-                  values={["html", "markdown"]}
+              <div className="split-vertical">
+                <Split
+                  sizes={[33.33, 33.33, 33.33]}
+                  direction="vertical"
+                  className="split-vertical-code"
+                  minSize={1}
+                  ref={refVertSplit}
+                >
+                  {codeBlocks.map((block, index) => (
+                    <CodeBlock
+                      key={index} // Cambia a una clave única si es necesario
+                      idkey={block.key}
+                      isPublic={block.public}
+                      name={block.name}
+                      active={block.active}
+                      expand={block.expand}
+                      content={block.content}
+                      setContent={block.setContent}
+                      type={block.type}
+                      setType={block.setType}
+                      values={block.values}
+                    />
+                  ))}
+                </Split>
+              </div>
+              <div className="split-vertical" style={{ position: "relative" }}>
+                <FrameComponent
+                  loadingFrame={loadingFrame}
+                  refresh={refresh}
+                  iframSrc={iframSrc}
+                  myRef={refIframe}
                 />
-                <CodeBlock
-                  name="cssfield"
-                  active={isExpanded}
-                  expand={() => toggleCollapseBlocks(1)}
-                  content={bin.cssContent}
-                  setContent={(value, viewUpdate) => updateBin("cssContent",value)}
-                  type={bin.cssContentType || "css"}
-                  setType={(evt) => updateBin("cssContentType",evt.target.value)}
-                  values={["css", "sass"]}
-                />
-                <CodeBlock
-                  name="jsfield"
-                  active={isExpanded}
-                  expand={() => toggleCollapseBlocks(2)}
-                  content={bin.jsContent}
-                  setContent={(value, viewUpdate) => updateBin("jsContent",value)}
-                  type={bin.jsContentType || "javascript"}
-                  setType={(evt) => updateBin("jsContentType",evt.target.value)}
-                  values={["javascript", "typescript"]}
-                />
-              </Split>
-            </div>
-            <div className="split-vertical" style={{ position: "relative" }}>
-              {refresh ? (
-                <Loader />
-              ) : loadingFrame ? (
-                <iframe
-                  title={lang.preview}
-                  src={iframSrc}
-                  ref={refIframe}
-                ></iframe>
-              ) : (
-                <section className="infoFrame">{lang.infoframe}</section>
-              )}
-            </div>
-          </Split>
-        </MainContent>
-        <DrawerContainer
-          isOpen={isOpen}
-          toggleDrawer={toggleDrawer}
-          handleOpenBin={handleOpenBin}
-        />
-        <ModalView
-          title={lang.settings}
-          height={27}
-          active={isOpenSettings}
-          closeModal={toggleModalSettings}
-        >
-          <Textarea
-            required={false}
-            name="cssLinks"
-            id="cssLinksid"
-            className="no-resize"
-            error={bin.cssLinks.length > 150 ? "error" : ""}
-            onChange={(e) => updateBin("cssLinks",e.target.value)}
-            placeholder={lang.putyourlinks}
-            value={bin.cssLinks}
-            label={lang.csslinks}
-            style={{ height: "7rem" }}
+              </div>
+            </Split>
+          </MainContent>
+          <DrawerComponent
+            isOpen={isOpen}
+            toggleDrawer={toggleDrawer}
+            handleOpenBin={openHandler}
           />
-          <Textarea
-            required={false}
-            className="no-resize"
-            name="jsLinks"
-            id="jsLinksid"
-            error={bin.jsLinks.length > 150 ? "error" : ""}
-            onChange={(e) => updateBin("jsLinks",e.target.value)}
-            placeholder={lang.putyourlinks}
-            value={bin.jsLinks}
-            label={lang.jslinks}
-            style={{ height: "7rem" }}
+          <ModalComponent
+            isOpenSettings={isOpenSettings}
+            toggleModalSettings={toggleModalSettings}
+            updateBin={updateBin}
           />
-          <Switch
-            name="public"
-            ischecked={bin.public ? "on" : "off"}
-            value={bin.public}
-            onChange={() => updateBin("public",!bin.public)}
-            title={lang.publiccode}
-          />
-        </ModalView>
-        <ToastContainer theme="dark" />
-      </MainApp>
-    </React.Suspense>
+          <ToastContainer theme="dark" />
+        </MainApp>
+      </React.Suspense>
+    </BinContext.Provider>
   );
 }

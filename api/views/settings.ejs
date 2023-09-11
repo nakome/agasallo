@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta name="author" content="Moncho Varela" />
+    <meta name="title" content="Agasallo" />
+    <meta name="description" content="Agasallo with steroids" />
+    <meta name="keywords" content="javascript,editor,Agasallo,md" />
+
+    <!-- Android  -->
+    <meta name="theme-color" content="#11141d">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-title" content="Manifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Windows  -->
+    <meta name="msapplication-navbutton-color" content="#1e202b">
+    <meta name="msapplication-TileColor" content="#11141d">
+
+    <!-- Pinned Sites  -->
+    <meta name="application-name" content="Agasallo">
+    <meta name="msapplication-tooltip" content="Html with esteroids.">
+    <meta name="msapplication-starturl" content="/">
+
+    <!-- Tap highlighting  -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- UC Mobile Browser  -->
+    <meta name="full-screen" content="yes">
+    <meta name="browsermode" content="application">
+
+    <meta itemprop="name" content="Agasallo" />
+    <meta itemprop="description" content="Agasallo with steroids" />
+
+    <link crossorigin rel="icon" href="<%= baseUrl %>/api/icons/favicon.ico" sizes="32x32">
+    <link crossorigin rel="icon" href="<%= baseUrl %>/api/icons/icon.svg" type="image/svg+xml">
+    <link crossorigin rel="apple-touch-icon" href="<%= baseUrl %>/api/icons/180.png"><!-- 180×180 -->
+    <link crossorigin rel="manifest" href="<%= baseUrl %>/api/icons/manifest.webmanifest">
+
+    <title>Agasallo | settings</title>
+
+    <style rel="stylesheet">:root{--primary:#11141d;--secondary:#1e202b;--info:#00BCD4;--warning:#ffc107;--danger:#e91e63;--light:#a1a1a1;--dark:#101115;--fontSize:14px;--fontWeight:300;--fontFamily:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;--lineHeight:1.5;--borderRadius:0;--padding:5px 10px;--defaultHeight:46px;--letterSpacing:0.5px;--media:768px}*{box-sizing:border-box}body{margin:10px;padding:0;background:var(--secondary);color:var(--light);font-family:var(--fontFamily);font-size:var(--fontSize);font-weight:var(--fontWeight);letter-spacing:var(--letterSpacing);line-height:var(--lineHeight);opacity:1;visibility:visible;animation:onload 2s 1 ease;overflow:hidden}@keyframes onload{0%{opacity:0}}::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:color-mix(in srgb,var(--primary),var(--secondary))}::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--secondary),var(--info))}::-webkit-scrollbar-corner{background:color-mix(in srgb,var(--primary),var(--secondary))}.form-group{position:relative}.form-group label{color:var(--light);font-weight:700}input[type=file]{height:50px}input[type=file]::file-selector-button{border-radius:4px;padding:0 16px;height:35px;cursor:pointer;background-color:var(--secondary);border:1px solid var(--secondary);box-shadow:0 1px 0 var(--dark);margin-right:16px;transition:background-color 200ms;color:var(--light)}input[type=file]::file-selector-button:hover{background-color:var(--info)}input[type=file]::file-selector-button:active{background-color:var(--info)}label{display:block;margin:5px 0}input:not(input[type=submit]),select,textarea{box-sizing:border-box;display:block;width:100%;padding:var(--padding);font-size:var(--fontSize);line-height:var(--lineHeight);outline:0;background:var(--primary);border:2px solid var(--primary);color:var(--light);border-radius:0;resize:none;box-shadow:0 1px 2px var(--dark);margin-bottom:0;min-height:47px}textarea[name=description]{height:140px}input:not(input[type=submit]):focus,select:focus,textarea:focus{outline:0;border:1px solid var(--warning)}input:not(input[type=submit])::placeholder,select::placeholder,textarea::placeholder{color:var(--warning)}input::selection,select::selection,textarea::selection{background:var(--warning);color:var(--dark)}button,input[type=submit]{cursor:pointer;padding:var(--padding);box-sizing:border-box;padding:var(--padding);font-size:var(--fontSize);line-height:var(--lineHeight);border:1px solid var(--info);background:var(--info);margin:10px 0}.button-danger,.button-info,.button-warning,.button-default{border-radius:var(--borderRadius);transition:background .5s ease,border .8s ease,color 1s ease;box-shadow:1px 2px 3px var(--primary)}.button-danger:is(:hover, :focus, :active),.button-info:is(:hover, :focus, :active),.button-warning:is(:hover, :focus, :active){transition:background .5s ease,border .8s ease,color 1s ease}.button-default{background:var(--primary)!important;color:var(--light)!important;transition:background .5s ease,border .8s ease,color 1s ease}.button.button-close{background:var(--primary);color:var(--danger);border-color:var(--primary);transition:none}.button.button-close:is(:hover, :focus, :active){border-color:var(--primary);transition:none}.button-default:is(:hover, :focus, :active){background:var(--secondary)!important;border:1px solid var(--primary)!important;color:var(--light)!important;transition:background .5s ease,border .8s ease,color 1s ease}.button-info{background:var(--info)!important;color:var(--dark)!important}.button-info:is(:hover, :focus, :active){background:var(--primary)!important;border:1px solid var(--info)!important;color:var(--light)!important}.button-warning{background:var(--warning)!important;color:var(--primary)!important}.button-warning:is(:hover, :focus, :active){background:var(--primary)!important;border:1px solid var(--warning)!important;color:var(--warning)!important}.button-danger{background:var(--danger)!important;color:var(--warning)!important}.button-danger:is(:hover, :focus, :active){background:var(--primary)!important;border:1px solid var(--danger)!important;color:var(--danger)!important}.button-loading{animation:flash .5s infinite ease}@keyframes flash{0%{opacity:0}}.divider{margin:2rem auto;border-bottom:1px solid var(--primary);height:0;width:100px}header{color:var(--light);text-align:center}h1{color:var(--warning)}fieldset{border-color:var(--warning)}legend{padding:0 10px;color:var(--info)}main{display:flex;flex-direction:column;width:100%;align-items:center;max-width:600px;margin:0 auto}a.link{color:var(--info);font-weight:700;text-decoration:none;border-bottom:2px solid var(--warning);padding-bottom:3px;transition:all 500ms ease}a.link:is(:hover,:focus){color:var(--warning);border-bottom:2px solid var(--info);transition:all 500ms ease}</style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Agasallo Settings</h1>
+            <p>Back to the <a href="/" class="link">App</a></p>
+        </header>
+        <section>
+            <fieldset>
+                <legend>Import Json file</legend>
+                <div class="form-group">
+                    <input type="file" name="file" id="input-import" accept="application/json"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="btn-import" class="button button-info">Import</button>
+                </div>
+            </fieldset>
+
+            <div class="divider"></div>
+
+            <fieldset>
+                <legend>Export to Json file</legend>
+                <div class="form-group">
+                    <button type="button" name="export" id="export" class="button button-info">Export data</button>
+                </div>
+            </fieldset>
+        </section>
+    </main>
+
+    <script type="module">
+        // import
+        import { Base } from "https://cdn.deta.space/js/deta@latest/deta.mjs";
+
+        // Connect to or create a Base
+        const db = Base("bins");
+
+        const input_import = document.getElementById("input-import");
+        const btn_import = document.getElementById("btn-import");
+        btn_import.addEventListener(
+            "click",
+            (evt) => {
+                evt.preventDefault();
+                btn_import.textContent = "Importing...";
+                if (input_import.value !== "") {
+                    btn_import.setAttribute("disabled", true);
+                    btn_import.classList.add("button-loading");
+                    importJson(input_import.files[0]).then((r) => {
+                        alert(r.msg);
+                        btn_import.textContent = "Import";
+                        btn_import.removeAttribute("disabled");
+                        btn_import.classList.remove("button-loading");
+                    });
+                }
+                return false;
+            },
+            false
+        );
+
+        async function importJson(archivo) {
+            const lector = new FileReader();
+            const outputPromise = new Promise((resolve) => {
+                lector.onload = () => {
+                    const datos = JSON.parse(lector.result);
+                    resolve(sendFile(datos));
+                };
+            });
+            lector.readAsText(archivo);
+            const output = await outputPromise;
+            return output;
+        }
+
+        async function sendFile(params) {
+            const url = `${location.origin}/api/import/data`;
+            // Configurar los encabezados de la solicitud POST
+            const options = {
+                method: "POST",
+                body: JSON.stringify(params),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            };
+            const response = await fetch(url, options);
+            const output = await response.json();
+            return output;
+        }
+
+        document.getElementById("export").addEventListener("click", exportJson);
+        async function exportJson() {
+            const response = await db.fetch();
+            const output = response.items;
+            const json = JSON.stringify(output);
+            const blob = new Blob([json], { type: "application/json" });
+            if (navigator.msSaveBlob) {
+                // Para Internet Explorer
+                navigator.msSaveBlob(blob, "backup.json");
+            } else {
+                const link = document.createElement("a");
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "backup.json");
+                    link.style.visibility = "hidden";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -4,10 +4,10 @@ import * as ReactDOM from "react-dom/client";
 import "normalize.css";
 import "./index.css";
 
-import { Loader } from "./components/Loader";
+import { Loader } from "./ui/Loader";
 
 // Error
-const ErrorBoundary = React.lazy(() => import("./components/ErrorBoundary"));
+const ErrorBoundary = React.lazy(() => import("./ui/ErrorBoundary"));
 const App = React.lazy(() => import("./App"))
 
 ReactDOM.createRoot(document.getElementById("root")).render(

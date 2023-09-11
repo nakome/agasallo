@@ -6,7 +6,7 @@ micros:
     src: website
     engine: static
     primary: true
-    public: true
+    public: false
     serve: dist
     dev: npm run dev -- --port $PORT
     commands:

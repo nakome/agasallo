@@ -32,5 +32,6 @@
   "expandblock":"Expand block",
   "selectmdfirst": "If you need convert to Markdown\rselect Markdown type first.",
   "selectsassfirst": "If you need convert to Sass\rselect Sass type first.",
-  "selecttsfirst": "If you need convert to Typescript\rselect Typescript type first."
+  "selecttsfirst": "If you need convert to Typescript\rselect Typescript type first.",
+  "moresettings":"More settings"
 }
