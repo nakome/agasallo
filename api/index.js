@@ -19,7 +19,6 @@ const app = Express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Utiliza path.join()
 
-
 app.use(Express.json({limit: "20mb", extended: true}));
 app.use(Express.urlencoded({limit: "20mb", extended: true, parameterLimit: 50000}))
 

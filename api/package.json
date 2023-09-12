@@ -10,6 +10,10 @@
   "author": "Deta",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.22.17",
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
+    "@babel/plugin-transform-runtime": "^7.22.15",
+    "@babel/preset-typescript": "^7.22.15",
     "body-parser": "^1.20.2",
     "compresion": "^1.7.11",
     "cors": "^2.8.5",

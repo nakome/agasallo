@@ -69,94 +69,25 @@
             <div class="divider"></div>
 
             <fieldset>
+                <legend>Import from Url Beta</legend>
+                <div class="form-group">
+                    <input type="text" name="raw" id="rawUrl" placeholder="Url of raw json"/>
+                    <button type="button" name="importRawUrl" id="importRawUrl" class="button button-info">Import Url</button>
+                </div>
+            </fieldset>
+
+            <div class="divider"></div>
+
+            <fieldset>
                 <legend>Export to Json file</legend>
                 <div class="form-group">
                     <button type="button" name="export" id="export" class="button button-info">Export data</button>
                 </div>
             </fieldset>
+
         </section>
     </main>
 
-    <script type="module">
-        // import
-        import { Base } from "https://cdn.deta.space/js/deta@latest/deta.mjs";
-
-        // Connect to or create a Base
-        const db = Base("bins");
-
-        const input_import = document.getElementById("input-import");
-        const btn_import = document.getElementById("btn-import");
-        btn_import.addEventListener(
-            "click",
-            (evt) => {
-                evt.preventDefault();
-                btn_import.textContent = "Importing...";
-                if (input_import.value !== "") {
-                    btn_import.setAttribute("disabled", true);
-                    btn_import.classList.add("button-loading");
-                    importJson(input_import.files[0]).then((r) => {
-                        alert(r.msg);
-                        btn_import.textContent = "Import";
-                        btn_import.removeAttribute("disabled");
-                        btn_import.classList.remove("button-loading");
-                    });
-                }
-                return false;
-            },
-            false
-        );
-
-        async function importJson(archivo) {
-            const lector = new FileReader();
-            const outputPromise = new Promise((resolve) => {
-                lector.onload = () => {
-                    const datos = JSON.parse(lector.result);
-                    resolve(sendFile(datos));
-                };
-            });
-            lector.readAsText(archivo);
-            const output = await outputPromise;
-            return output;
-        }
-
-        async function sendFile(params) {
-            const url = `${location.origin}/api/import/data`;
-            // Configurar los encabezados de la solicitud POST
-            const options = {
-                method: "POST",
-                body: JSON.stringify(params),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            };
-            const response = await fetch(url, options);
-            const output = await response.json();
-            return output;
-        }
-
-        document.getElementById("export").addEventListener("click", exportJson);
-        async function exportJson() {
-            const response = await db.fetch();
-            const output = response.items;
-            const json = JSON.stringify(output);
-            const blob = new Blob([json], { type: "application/json" });
-            if (navigator.msSaveBlob) {
-                // Para Internet Explorer
-                navigator.msSaveBlob(blob, "backup.json");
-            } else {
-                const link = document.createElement("a");
-                if (link.download !== undefined) {
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", "backup.json");
-                    link.style.visibility = "hidden";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            }
-        }
-
-    </script>
+    <script type="module" src="./settings.js"> </script>
 </body>
 </html>

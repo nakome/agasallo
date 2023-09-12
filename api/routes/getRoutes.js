@@ -4,8 +4,8 @@ import { Deta } from "deta";
 import {
   checkTypeAndRender,
   parseCode,
-  compare,
   capitalize,
+  loadBin
 } from "../utils.js";
 
 const deta = Deta();
@@ -17,18 +17,19 @@ const app = Express();
  */
 app.get("/settings", async (req, res) => {
   try {
-    res.render("settings", {baseUrl: `//${process.env.DETA_SPACE_APP_HOSTNAME}`});
+    res.render("settings", {
+      baseUrl: `//${process.env.DETA_SPACE_APP_HOSTNAME}`,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, error });
   }
 });
 
-
 /**
  * Get only one
  */
-app.get("/:key", async (req, res) => {
+app.get("/uid/:key", async (req, res) => {
   try {
     const bins = await db.get(req.params.key);
     res.send({ success: true, data: bins });
@@ -52,8 +53,7 @@ app.get("/s/:name", async (req, res) => {
       { "create_at?contains": req.params.name.toLowerCase() },
     ];
     const bins = await db.fetch(queries);
-    bins.items.sort(compare);
-    res.send({ success: true, data: bins });
+    res.send({ success: true, data: await loadBin(bins) });
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, error });
@@ -130,14 +130,33 @@ app.get("/preview/:key", async (req, res) => {
   }
 });
 
+
+/**
+ * Get only one
+ */
+app.get("/raw/:key", async (req, res) => {
+  try {
+    const bin = await db.get(req.params.key);
+    if (bin && bin.public) {
+      res.status(200).send({ success: true, data:bin });
+    }else {
+      res.render("error", {
+        baseUrl: `//${process.env.DETA_SPACE_APP_HOSTNAME}`,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ success: false, error });
+  }
+});
+
 /*
  * Get list of Bins
  */
 app.get("/", async (req, res) => {
   try {
     const bins = await db.fetch();
-    bins.items.sort(compare);
-    res.send({ success: true, data: bins });
+    res.send({ success: true, data: await loadBin(bins) });
   } catch (error) {
     console.error(error);
     res.status(500).send({ success: false, error });

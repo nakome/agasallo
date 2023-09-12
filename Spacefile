@@ -19,8 +19,10 @@ micros:
     dev: npm run dev
     public_routes:
       - "/share/*"
+      - "/raw/*"
       - "/ejs/*"
       - "/ts/*"
+      - "/babel/*"
       - "/scss/*"
       - "/md/*"
       - "/icons/*"

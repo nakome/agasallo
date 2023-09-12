@@ -31,6 +31,18 @@ export const TypeScriptToJs = async (content) => {
     return error;
   }
 };
+export const BabelToJs = async (content) => {
+  try {
+    const response = await fetchData("/api/convert/to/babel", {
+      js_code: content,
+    });
+    const output = await response;
+    return output.status ? output.data : "Error: " + JSON.stringify(output);
+  } catch (error) {
+    return error;
+  }
+};
+
 
 async function fetchData(url, data) {
   let options = {

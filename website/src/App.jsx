@@ -99,7 +99,7 @@ export default function App() {
       setContent: (value, viewUpdate) => updateBin("jsContent", value),
       type: bin.jsContentType || "javascript",
       setType: (evt) => updateBin("jsContentType", evt.target.value),
-      values: ["javascript", "typescript"],
+      values: ["babel", "javascript", "typescript"],
     },
   ];
 

@@ -1,6 +1,6 @@
 export const GetAllData = async () => {
     try {
-        let url = `${location.origin}/api`
+        let url = `${location.origin}/api`;
         const response = await fetch(url)
         return await response.json()
     } catch (error) {
@@ -10,7 +10,7 @@ export const GetAllData = async () => {
 
 export const GetDataKey = async (key) => {
     try {
-        let url = `${location.origin}/api/${key}`
+        let url = `${location.origin}/api/uid/${key}`
         const response = await fetch(url)
         return await response.json()
     } catch (error) {

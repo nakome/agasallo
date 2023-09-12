@@ -12,7 +12,7 @@ import { SearchData, GetAllData } from "../api/GetData";
 import { DeleteBin } from "../api/PostData";
 
 // Components
-import { InputSearch } from "../ui/Forms";
+import { InputSearch, Button } from "../ui/Forms";
 import EmptyDb from "../ui/EmptyDb";
 import Card from "../ui/Card";
 import { Loader } from "../ui/Loader";
@@ -20,25 +20,18 @@ import { Loader } from "../ui/Loader";
 // language
 import lang from "../config/language.json";
 
-const DrawerHeader = (props) => (
-  <header className="drawer-header" {...props}>
-    {props.children}
-  </header>
-);
-const DrawerBody = (props) => (
-  <section className="drawer-body" {...props}>
-    {props.children}
-  </section>
-);
-
 export default function DrawerComponent(props) {
   // Search
   const [searchTitle, setSearchTitle] = React.useState("");
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
+  React.useEffect(() => {
+    loadDataOnDrawer();
+  }, [props.isOpen]);
+
   // search input function
-  const handleSearchDrawerData = (event) => {
+  const handleSearchDrawerData = React.useCallback((event) => {
     if (event.key === "Enter") {
       if (event.target.value === "") {
         loadDataOnDrawer();
@@ -46,14 +39,10 @@ export default function DrawerComponent(props) {
         loadSearchDataOnDrawer();
       }
     }
-  };
-
-  React.useEffect(() => {
-    loadDataOnDrawer();
-  }, [props.isOpen]);
+  });
 
   // Delete bin
-  const handleDeleteBin = async (key) => {
+  const handleDeleteBin = React.useCallback(async (key) => {
     if (confirm(lang.areyousure)) {
       const request = await DeleteBin(key);
       if (request.success) {
@@ -65,15 +54,18 @@ export default function DrawerComponent(props) {
         toast.error(lang.coderemovederr);
       }
     }
-  };
+  });
 
-  // Load data on open drawer
+  // Function to load data
   async function loadDataOnDrawer() {
-    setLoading(true);
-    const response = await GetAllData();
-    if (response.success) {
-      setData(response.data);
-      setLoading(false);
+    if(props.isOpen) {
+      setLoading(true);
+      // Call GetAllData with the current number of items to load.
+      const response = await GetAllData();
+      if (response.success) {
+        setData(response.data);
+        setLoading(false);
+      }
     }
   }
 
@@ -94,7 +86,7 @@ export default function DrawerComponent(props) {
       direction="left"
       className="drawer-menu"
     >
-      <DrawerHeader>
+      <header className="drawer-header">
         <InputSearch
           id="Search"
           name="Search"
@@ -104,27 +96,23 @@ export default function DrawerComponent(props) {
           onKeyPress={handleSearchDrawerData}
           placeholder={lang.searchtitle}
         />
-      </DrawerHeader>
-      <DrawerBody>
-        <section
-          style={{ position: "relative", width: "100%", height: "100%" }}
-        >
-          {loading ? (
-            <Loader />
-          ) : data.count > 0 ? (
-            data.items.map((item, index) => (
-              <Card
-                openBin={() => props.handleOpenBin(item.key)}
-                deleteBin={() => handleDeleteBin(item.key)}
-                key={item.key}
-                data={item}
-              />
-            ))
-          ) : (
-            <EmptyDb />
-          )}
-        </section>
-      </DrawerBody>
+      </header>
+      <section className="drawer-body">
+        {loading ? (
+          <Loader />
+        ) : data.length > 0 ? (
+          data.map((item, index) => (
+            <Card
+              openBin={() => props.handleOpenBin(item.key)}
+              deleteBin={() => handleDeleteBin(item.key)}
+              key={item.key}
+              data={item}
+            />
+          ))
+        ) : (
+          <EmptyDb />
+        )}
+      </section>
     </Drawer>
   );
 }

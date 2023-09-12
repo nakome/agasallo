@@ -15,7 +15,7 @@ import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { Button, Select } from "../ui/Forms";
 
-import { MarkdownToHtml, ScssToCss, TypeScriptToJs } from "../api/Converter";
+import { MarkdownToHtml, ScssToCss, TypeScriptToJs,BabelToJs } from "../api/Converter";
 
 import Lang from "../config/language.json";
 
@@ -49,6 +49,10 @@ export default function CodeBlock(props) {
         case "typescript":
           newType = "typescript";
           newPreview = await TypeScriptToJs(props.content);
+          break;
+        case "babel":
+          newType = "babel";
+          newPreview = await BabelToJs(props.content);
           break;
         case "javascript":
           newPreview = Lang.selecttsfirst;
@@ -102,14 +106,14 @@ export default function CodeBlock(props) {
             readOnly={true}
             value={preview}
             height="100%"
-            extensions={[loadLanguage(type)]}
+            extensions={[loadLanguage((type === "babel" ? "javascript" : type))]}
             theme={aura}
           />
         ) : (
           <CodeMirror
             value={props.content}
             height="100%"
-            extensions={[loadLanguage(props.type)]}
+            extensions={[loadLanguage((props.type === "babel" ? "javascript" : props.type))]}
             theme={aura}
             onChange={props.setContent}
           />

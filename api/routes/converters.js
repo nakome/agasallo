@@ -4,6 +4,7 @@ import {
   toTypeScript,
   toCss,
   toMd,
+  toBabel,
   ejsToHtml,
 } from "../utils.js";
 
@@ -56,6 +57,19 @@ app.post("/scss", async (req, res) => {
 app.post("/md", async (req, res) => {
   try {
     let source = toMd(req.body.html_code);
+    res.send(source);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ success: false, error: error });
+  }
+});
+
+/**
+ * Compile with babel
+ */
+app.post("/babel", async (req, res) => {
+  try {
+    let source = toBabel(req.body.js_code);
     res.send(source);
   } catch (error) {
     console.error(error);
