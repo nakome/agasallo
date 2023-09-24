@@ -1,5 +1,4 @@
 import React from "react";
-
 // https://react-icons.github.io/react-icons/icons?name=bi
 import {
   BiExpand,
@@ -7,6 +6,7 @@ import {
   BiCodeCurly,
   BiX,
   BiLinkExternal,
+  BiCode
 } from "react-icons/bi";
 
 import CodeMirror from "@uiw/react-codemirror";
@@ -86,6 +86,14 @@ export default function CodeBlock(props) {
               <BiLinkExternal />
             </a>
           )}
+
+          <Button
+            onClick={props.formatCode}
+            className={active ? "button-active" : ""}
+            title={Lang.formatcode}
+          >
+             <BiCode />
+          </Button>
 
           <Button
             onClick={handlePreview}

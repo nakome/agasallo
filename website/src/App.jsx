@@ -1,5 +1,13 @@
 import React from "react";
 
+import * as prettier from "https://unpkg.com/prettier@3.0.3/standalone.mjs";
+import prettierPluginBabel from "https://unpkg.com/prettier@3.0.3/plugins/babel.mjs";
+import prettierPluginEstree from "https://unpkg.com/prettier@3.0.3/plugins/estree.mjs";
+import prettierPluginHtml from "https://unpkg.com/prettier@3.0.3/plugins/html.mjs";
+import prettierPluginPostCss from "https://unpkg.com/prettier@3.0.3/plugins/postcss.mjs";
+import prettierPluginTypescript from "https://unpkg.com/prettier@3.0.3/plugins/typescript.mjs";
+import prettierPluginMarkdown from "https://unpkg.com/prettier@3.0.3/plugins/markdown.mjs";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Split from "react-split";
@@ -76,6 +84,7 @@ export default function App() {
       type: bin.htmlContentType || "html",
       setType: (evt) => updateBin("htmlContentType", evt.target.value),
       values: ["html", "markdown"],
+      formatCode: () => formatCode(bin.htmlContentType || "html")
     },
     {
       key: bin.key,
@@ -88,6 +97,7 @@ export default function App() {
       type: bin.cssContentType || "css",
       setType: (evt) => updateBin("cssContentType", evt.target.value),
       values: ["css", "sass"],
+      formatCode: () => formatCode(bin.cssContentType || "css")
     },
     {
       key: bin.key,
@@ -100,6 +110,7 @@ export default function App() {
       type: bin.jsContentType || "javascript",
       setType: (evt) => updateBin("jsContentType", evt.target.value),
       values: ["babel", "javascript", "typescript"],
+      formatCode: () => formatCode(bin.jsContentType || "javascript")
     },
   ];
 
@@ -134,6 +145,79 @@ export default function App() {
     },
     [createOrUpdate]
   );
+
+  // Format code
+  async function formatCode(type) {
+    switch (type) {
+      case "javascript":
+      case "babel":
+        try {
+          let output = await prettier.format(bin.jsContent, {
+            parser: "babel",
+            plugins: [prettierPluginBabel, prettierPluginEstree, prettierPluginHtml],
+          });
+          updateBin("jsContent", output);
+          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        } catch (err) {
+          console.log(err);
+          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        }
+        break;
+      case "typescript":
+        try {
+          let output = await prettier.format(bin.jsContent, {
+            parser: "typescript",
+            plugins: [prettierPluginTypescript, prettierPluginEstree, prettierPluginHtml],
+          });
+          updateBin("jsContent", output);
+          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        } catch (err) {
+          console.log(err);
+          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        }
+        break;
+      case "css":
+      case "sass":
+        try {
+          let output = await prettier.format(bin.cssContent, {
+            parser: "css",
+            plugins: [prettierPluginPostCss],
+          });
+          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          updateBin("cssContent", output);
+        } catch (err) {
+          console.log(err);
+          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        }
+        break;
+      case "html":
+        try {
+          let output = await prettier.format(bin.htmlContent, {
+            parser: "html",
+            plugins: [prettierPluginHtml],
+          });
+          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          updateBin("htmlContent", output);
+        } catch (err) {
+          console.log(err);
+          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        }
+        break;
+      case "markdown":
+        try {
+          let output = await prettier.format(bin.htmlContent, {
+            parser: "markdown",
+            plugins: [prettierPluginHtml, prettierPluginMarkdown],
+          });
+          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          updateBin("htmlContent", output);
+        } catch (err) {
+          console.log(err);
+          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+        }
+        break;
+    }
+  }
 
   // If isNew create else update
   function createOrUpdate() {
@@ -352,6 +436,7 @@ export default function App() {
                       type={block.type}
                       setType={block.setType}
                       values={block.values}
+                      formatCode={block.formatCode}
                     />
                   ))}
                 </Split>

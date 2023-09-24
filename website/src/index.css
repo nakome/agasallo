@@ -14,7 +14,7 @@
   --padding: 5px 10px;
   --defaultHeight: 46px;
   --letterSpacing: 0.5px;
-  --media: 768px;
+  --media: 768px
 }
 
 * {
@@ -34,12 +34,12 @@ body {
   opacity: 1;
   visibility: visible;
   animation: onload 2s 1 ease;
-  overflow: hidden;
+  overflow: hidden
 }
 
 @keyframes onload {
   from {
-    opacity: 0;
+    opacity: 0
   }
 }
 
@@ -67,36 +67,37 @@ pre::selection {
 }
 
 iframe {
-  background: white;
+  background: #fff;
   width: 100%;
   height: 100%;
-  border: none;
+  border: none
 }
 
+kbd {
+  background: var(--secondary);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--dark);
+  font-size: 12px;
+}
 
-
-/** - Scrollbar
--------------------------------------------*/
 ::-webkit-scrollbar {
   width: 10px;
-  height: 10px;
+  height: 10px
 }
 
 ::-webkit-scrollbar-track {
-  background: color-mix(in srgb, var(--primary), var(--secondary));
+  background: color-mix(in srgb, var(--primary), var(--secondary))
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--secondary), var(--info));
+  background: color-mix(in srgb, var(--secondary), var(--info))
 }
 
 ::-webkit-scrollbar-corner {
-  background: color-mix(in srgb, var(--primary), var(--secondary));
+  background: color-mix(in srgb, var(--primary), var(--secondary))
 }
 
-
-/** - Switch
--------------------------------------------*/
 .switch-form {
   margin-bottom: 10px;
   margin-top: 10px;
@@ -160,51 +161,46 @@ iframe {
 .switch-form span {
   color: var(--light);
   padding-top: 0;
-  padding-left: 10px;
+  padding-left: 10px
 }
 
-/** - Form group
--------------------------------------------*/
 .form-group {
   position: relative
 }
 
 .form-group label {
   color: var(--light);
-  font-weight: bold;
+  font-weight: 700
 }
 
-input[type="file"] {
-  height: 50px;
+input[type=file] {
+  height: 50px
 }
 
-/* file upload button */
-input[type="file"]::file-selector-button {
+input[type=file]::file-selector-button {
   border-radius: 4px;
   padding: 0 16px;
   height: 35px;
   cursor: pointer;
   background-color: var(--secondary);
   border: 1px solid var(--secondary);
-  box-shadow: 0px 1px 0px var(--dark);
+  box-shadow: 0 1px 0 var(--dark);
   margin-right: 16px;
-  transition: background-color 200ms;
-  color: var(--light);
+  transition: background-color .2s;
+  color: var(--light)
 }
 
-/* file upload button hover state */
-input[type="file"]::file-selector-button:hover {
-  background-color: var(--info);
+input[type=file]::file-selector-button:hover {
+  background-color: var(--info)
 }
 
-/* file upload button active state */
-input[type="file"]::file-selector-button:active {
-  background-color: var(--info);
+input[type=file]::file-selector-button:active {
+  background-color: var(--info)
 }
 
 label {
   display: block;
-  margin: 5px 0;
+  margin: 5px 0
 }
 
 input:not(input[type=submit]),
@@ -222,13 +218,13 @@ textarea {
   color: var(--light);
   border-radius: 0;
   resize: none;
-  box-shadow: 0px 1px 2px var(--dark);
+  box-shadow: 0 1px 2px var(--dark);
   margin-bottom: 0;
-  min-height: 47px;
+  min-height: 47px
 }
 
-textarea[name="description"] {
-  height: 140px;
+textarea[name=description] {
+  height: 140px
 }
 
 input:not(input[type=submit]):focus,
@@ -257,81 +253,80 @@ input[type=submit] {
   box-sizing: border-box;
   padding: var(--padding);
   font-size: var(--fontSize);
-  line-height: var(--lineHeight);
+  line-height: var(--lineHeight)
 }
 
-
-/** - Buttons
--------------------------------------------*/
 .button-danger,
+.button-default,
 .button-info,
-.button-warning,
-.button-default {
+.button-warning {
   border-radius: var(--borderRadius);
   transition: background .5s ease, border .8s ease, color 1s ease;
-  box-shadow: 1px 2px 3px var(--primary);
+  box-shadow: 1px 2px 3px var(--primary)
 }
 
 .button-danger:is(:hover, :focus, :active),
 .button-info:is(:hover, :focus, :active),
 .button-warning:is(:hover, :focus, :active) {
-  transition: background .5s ease, border .8s ease, color 1s ease;
+  transition: background .5s ease, border .8s ease, color 1s ease
 }
 
 .button-default {
   background: var(--primary) !important;
   color: var(--light) !important;
-  transition: background 0.5s ease, border 0.8s ease, color 1s ease;
+  transition: background .5s ease, border .8s ease, color 1s ease
 }
+
 .button.button-close {
   background: var(--primary);
   color: var(--danger);
   border-color: var(--primary);
-  transition: none;
+  transition: none
 }
+
 .button.button-close:is(:hover, :focus, :active) {
   border-color: var(--primary);
-  transition: none;
+  transition: none
 }
 
 .button-default:is(:hover, :focus, :active) {
   background: var(--secondary) !important;
   border: 1px solid var(--primary) !important;
   color: var(--light) !important;
-  transition: background 0.5s ease, border 0.8s ease, color 1s ease;
+  transition: background .5s ease, border .8s ease, color 1s ease
 }
 
 .button-info {
   background: var(--info) !important;
-  color: var(--dark) !important;
+  color: var(--dark) !important
 }
 
 .button-info:is(:hover, :focus, :active) {
   background: var(--primary) !important;
   border: 1px solid var(--info) !important;
-  color: var(--light) !important;
+  color: var(--light) !important
 }
 
 .button-warning {
   background: var(--warning) !important;
-  color: var(--primary) !important;
+  color: var(--primary) !important
 }
 
 .button-warning:is(:hover, :focus, :active) {
   background: var(--primary) !important;
   border: 1px solid var(--warning) !important;
-  color: var(--warning) !important;
+  color: var(--warning) !important
 }
 
 .button-danger {
   background: var(--danger) !important;
-  color: var(--warning) !important;
+  color: var(--warning) !important
 }
 
 .button-danger:is(:hover, :focus, :active) {
   background: var(--primary) !important;
   border: 1px solid var(--danger) !important;
-  color: var(--danger) !important;
+  color: var(--danger) !important
 }
 
 .button-loading {
@@ -351,11 +346,11 @@ input[type=submit] {
   align-items: center;
   text-decoration: none;
   padding: var(--padding);
-  cursor: pointer;
+  cursor: pointer
 }
 
 .button span {
-  margin-left: 5px;
+  margin-left: 5px
 }
 
 .buttons {
@@ -370,9 +365,6 @@ input[type=submit] {
   margin-right: 5px
 }
 
-
-/** - Card
--------------------------------------------*/
 .card {
   display: flex;
   flex-direction: column;
@@ -384,7 +376,7 @@ input[type=submit] {
   margin-bottom: 5px;
   opacity: 1;
   border-radius: var(--borderRadius);
-  box-shadow: 0px 2px 1px var(--primary);
+  box-shadow: 0 2px 1px var(--primary)
 }
 
 @keyframes fadeIn {
@@ -402,7 +394,7 @@ input[type=submit] {
   flex-direction: row;
   justify-content: space-between;
   min-height: var(--defaultHeight);
-  padding: 0 5px;
+  padding: 0 5px
 }
 
 .card-header-text {
@@ -495,11 +487,11 @@ input[type=submit] {
   padding-left: 3px;
   text-transform: capitalize;
   border-top: 1px solid var(--primary);
-  color: var(--light);
+  color: var(--light)
 }
 
 .card-footer a {
-  color: color-mix(in srgb, var(--info), var(--warning));
+  color: color-mix(in srgb, var(--info), var(--warning))
 }
 
 .card-footer-left {
@@ -523,9 +515,6 @@ input[type=submit] {
   color: var(--warning)
 }
 
-
-/** - Preloader
--------------------------------------------*/
 .preloader {
   align-items: center;
   background: var(--secondary);
@@ -559,9 +548,6 @@ input[type=submit] {
   }
 }
 
-
-/** - Info
--------------------------------------------*/
 .info {
   margin: 10px 0;
   padding: var(--padding);
@@ -573,7 +559,7 @@ input[type=submit] {
 }
 
 .info a {
-  color: var(--light);
+  color: var(--light)
 }
 
 .infoFrame {
@@ -585,14 +571,12 @@ input[type=submit] {
   margin: 0;
   border: none;
   color: var(--info);
-  font-weight: bold;
+  font-weight: 700
 }
 
-/** - Details
--------------------------------------------*/
 details {
   background: var(--primary);
-  padding: 0rem;
+  padding: 0;
   border: 1px solid var(--secondary);
   border-radius: 0;
   user-select: none;
@@ -645,16 +629,13 @@ details summary:after {
 }
 
 details[open] summary:after {
-  transform: rotate(45deg);
+  transform: rotate(45deg)
 }
 
 details .details-body {
   margin: 0
 }
 
-
-/** - Divider
--------------------------------------------*/
 .divider {
   margin: 2rem auto;
   border-bottom: 1px solid var(--primary);
@@ -662,10 +643,6 @@ details .details-body {
   width: 100px
 }
 
-
-
-/** - App
--------------------------------------------*/
 .app {
   background: var(--secondary);
   font-family: var(--fontFamily);
@@ -684,17 +661,17 @@ details .details-body {
   padding: 2px;
   -webkit-user-select: none;
   user-select: none;
-  color: var(--light);
+  color: var(--light)
 }
 
-.app-header input[type="text"] {
+.app-header input[type=text] {
   margin: 0;
   min-width: 300px !important;
   min-height: 40px;
   box-shadow: none;
   background: color-mix(in srgb, var(--secondary), var(--primary));
   border-radius: 0;
-  border: 1px solid var(--dark);
+  border: 1px solid var(--dark)
 }
 
 .app-header input[type=search] {
@@ -705,13 +682,13 @@ details .details-body {
   box-shadow: none;
   min-width: 20rem;
   min-height: 40px;
-  border-radius: 0;
+  border-radius: 0
 }
 
-.app-header-left,
 .app-header-center,
+.app-header-left,
 .app-header-right {
-  width: calc(100%/3 - 10px);
+  width: calc(100%/3 - 10px)
 }
 
 .app-header-left {
@@ -736,11 +713,9 @@ details .details-body {
   justify-content: flex-end
 }
 
-/** - Tooltip
--------------------------------------------*/
 .app-header a,
 .app-header button {
-  position: relative;
+  position: relative
 }
 
 .app-header a:after,
@@ -752,36 +727,34 @@ details .details-body {
   border: 1px solid var(--primary);
   color: var(--light);
   border-radius: var(--borderRadius);
-  box-shadow: 0px 2px 2px var(--dark);
+  box-shadow: 0 2px 2px var(--dark);
   z-index: 100;
   white-space: pre;
-  display: none;
+  display: none
 }
 
-/** Left & right position */
 .app-header-right a:after,
 .app-header-right button:after {
   bottom: -29px;
-  right: 0;
+  right: 0
 }
 
 .app-header-left a:after,
 .app-header-left button:after {
   bottom: -29px;
-  left: 0;
+  left: 0
 }
 
 .app-header a:focus:after,
-.app-header button:focus:after,
 .app-header a:hover:after,
+.app-header button:focus:after,
 .app-header button:hover:after {
-  display: inline;
+  display: inline
 }
 
-
+.app-header .button,
 .app-header a,
-.app-header button,
-.app-header .button {
+.app-header button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -793,11 +766,11 @@ details .details-body {
   border: 1px solid var(--dark);
   color: var(--light);
   cursor: pointer;
-  min-width: 40px;
+  min-width: 40px
 }
 
-.app-header button:is(:hover, :focus, :active),
-.app-header a:is(:hover, :focus, :active) {
+.app-header a:is(:hover, :focus, :active),
+.app-header button:is(:hover, :focus, :active) {
   border-color: var(--warning);
   color: var(--warning);
   transition: all .5s ease
@@ -816,18 +789,16 @@ details .details-body {
   color: var(--dark)
 }
 
-/** - Split
--------------------------------------------*/
 .split-horizontal {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100%;
+  height: 100%
 }
 
 .split-vertical {
   width: calc(100%/2);
-  height: 100%;
+  height: 100%
 }
 
 .split-vertical-code {
@@ -836,7 +807,7 @@ details .details-body {
   width: 100%;
   height: 100%;
   position: relative;
-  z-index: 10;
+  z-index: 10
 }
 
 .gutter {
@@ -845,7 +816,7 @@ details .details-body {
   background-position: 50%;
   margin: 0;
   padding: 0;
-  z-index: 10;
+  z-index: 10
 }
 
 .gutter.gutter-horizontal {
@@ -855,17 +826,13 @@ details .details-body {
 
 .gutter.gutter-vertical {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAAAXNSR0IArs4c6QAAAC1JREFUKFNjbJ+49joDI+OtyrwgfwYGBgZ68RnpZRG6xxhBvhwIMHA+HqigBgB72pnmtvALQQAAAABJRU5ErkJggg==');
-  cursor: row-resize;
+  cursor: row-resize
 }
 
 .cm-theme {
-  height: 100%;
+  height: 100%
 }
 
-
-
-/** - Modal
--------------------------------------------*/
 .overlay {
   position: fixed;
   width: 100%;
@@ -876,14 +843,14 @@ details .details-body {
   visibility: hidden;
   z-index: 100;
   background: rgb(0 0 0 / 54%);
-  transition: opacity 200ms ease;
-  cursor: pointer;
+  transition: opacity .2s ease;
+  cursor: pointer
 }
 
 .overlay-active {
   opacity: 1;
   visibility: visible;
-  transition: opacity 200ms ease;
+  transition: opacity .2s ease
 }
 
 .modal {
@@ -903,20 +870,19 @@ details .details-body {
   border-radius: var(--borderRadius);
   opacity: 0;
   z-index: 101;
-  visibility: hidden;
+  visibility: hidden
 }
 
-/* Cambiamos a 1 columna */
-@media (max-width: 600px) {
+@media (max-width:600px) {
   .modal {
     width: calc(100% - 1rem);
-    height: calc(100% - 1rem);
+    height: calc(100% - 1rem)
   }
 }
 
 .modal-active {
   opacity: 1;
-  visibility: visible;
+  visibility: visible
 }
 
 .modal-header {
@@ -928,7 +894,7 @@ details .details-body {
   justify-content: space-between;
   padding: 2px;
   user-select: none;
-  color: var(--light);
+  color: var(--light)
 }
 
 .modal-header-left {
@@ -946,10 +912,10 @@ details .details-body {
 .modal-header-title {
   padding: 5px;
   font-size: var(--fontSize);
-  font-weight: bold;
+  font-weight: 700;
   line-height: var(--lineHeight);
   color: var(--light);
-  margin-left: 10px;
+  margin-left: 10px
 }
 
 .modal-header-right {
@@ -972,8 +938,8 @@ details .details-body {
   color: var(--light)
 }
 
-.modal-header button:is(:hover, :focus, :active),
-.modal-header a:is(:hover, :focus, :active) {
+.modal-header a:is(:hover, :focus, :active),
+.modal-header button:is(:hover, :focus, :active) {
   border-color: var(--warning);
   transition: all .5s ease
 }
@@ -981,14 +947,12 @@ details .details-body {
 .modal-main-content {
   padding: 10px;
   overflow: auto;
-  height: calc(100% - 47px);
+  height: calc(100% - 47px)
 }
 
-/** - Code
--------------------------------------------*/
 .code {
   height: 100%;
-  overflow: hidden;
+  overflow: hidden
 }
 
 .code-header {
@@ -998,9 +962,9 @@ details .details-body {
   justify-content: space-between;
   line-height: 32px;
   padding-left: 5px;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--light);
-  overflow: hidden;
+  overflow: hidden
 }
 
 .code-header select {
@@ -1012,11 +976,12 @@ details .details-body {
   margin: 2px 0;
   height: 30px;
   line-height: 30px;
-  text-transform: capitalize;
+  text-transform: capitalize
 }
-.code-header select:focus{
+
+.code-header select:focus {
   background: var(--primary);
-  border: 1px solid var(--primary);
+  border: 1px solid var(--primary)
 }
 
 .code-header a,
@@ -1031,11 +996,11 @@ details .details-body {
   background: var(--secondary);
   border: 1px solid var(--secondary);
   color: var(--light);
-  cursor: pointer;
+  cursor: pointer
 }
 
-.code-header button:is(:hover, :focus, :active),
-.code-header a:is(:hover, :focus, :active) {
+.code-header a:is(:hover, :focus, :active),
+.code-header button:is(:hover, :focus, :active) {
   border-color: var(--warning);
   color: var(--warning);
   transition: all .5s ease
@@ -1043,22 +1008,21 @@ details .details-body {
 
 .code-header button.button-active {
   background: var(--warning);
-  color: var(--primary);
+  color: var(--primary)
 }
 
-.code-header-right{
-  display: flex;
+.code-header-right {
+  display: flex
 }
+
 .code-body {
   height: calc(100% - 32px);
-  width: 100%;
+  width: 100%
 }
 
-/** - Drawer
--------------------------------------------*/
 .drawer-menu {
   background: var(--secondary) !important;
-  min-width: 300px;
+  min-width: 300px
 }
 
 .drawer-header {
@@ -1066,42 +1030,43 @@ details .details-body {
   background: var(--primary);
   border-bottom: 2px solid var(--info);
   padding: var(--padding);
-  margin: 0 auto;
+  margin: 0 auto
 }
 
 .drawer-body {
   height: calc(100% - 60px);
   overflow-y: auto;
   margin: 0;
-  padding: var(--padding);
+  padding: var(--padding)
 }
-.drawer-body .loadMore{
+
+.drawer-body .loadMore {
   border: 1px solid var(--primary);
   display: block;
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px 0
 }
 
-@media (max-width: 600px) {
+@media (max-width:600px) {
 
   .app-header-left a,
   .app-header-left button {
-    min-width: 42px !important;
+    min-width: 42px !important
   }
 
-  .app-header-left input[type="text"] {
-    min-width: 240px !important;
+  .app-header-left input[type=text] {
+    min-width: 240px !important
   }
 
   .app-header-center {
-    display: none !important;
+    display: none !important
   }
 }
 
-@media (max-width: 400px) {
-  .app-header-left input[type="text"] {
-    min-width: 142px !important;
+@media (max-width:400px) {
+  .app-header-left input[type=text] {
+    min-width: 142px !important
   }
 }

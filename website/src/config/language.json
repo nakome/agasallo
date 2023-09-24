@@ -25,6 +25,7 @@
   "publiccode":"Public code",
   "successsave":"The code has been created!",
   "successupdated":"The code has been updated!",
+  "successformat":"The code has been formated!",
   "errorupdated":"Ups, error on updated!",
   "loading":"Loading...",
   "loadingcomponent":"Loading components...",
@@ -34,5 +35,7 @@
   "selectsassfirst": "If you need convert to Sass\rselect Sass type first.",
   "selecttsfirst": "If you need convert to Typescript\r or Babel for React\nselect Typescript type first.",
   "moresettings":"More settings",
-  "loadmore": "Load More 🚀"
+  "loadmore": "Load More 🚀",
+  "formatcode": "Format Code",
+  "errorformat": "Error, open console for more details."
 }
