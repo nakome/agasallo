@@ -5,12 +5,9 @@ micros:
   - name: website
     src: website
     engine: static
-    primary: true
-    public: false
-    serve: dist
     dev: npm run dev -- --port $PORT
-    commands:
-      - npm run build
+    primary: true
+    serve: ./public
   - name: api
     src: api
     engine: nodejs16
