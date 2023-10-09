@@ -69,6 +69,7 @@ app.get("/share/:key", async (req, res) => {
     if (bin && bin.public) {
       res.render("index", {
         baseUrl: `//${process.env.DETA_SPACE_APP_HOSTNAME}`,
+        debug:false,
         data: checkTypeAndRender(bin),
       });
     } else {
@@ -117,6 +118,7 @@ app.get("/preview/:key", async (req, res) => {
     if (bin) {
       res.render("index", {
         baseUrl: `//${process.env.DETA_SPACE_APP_HOSTNAME}`,
+        debug: true,
         data: checkTypeAndRender(bin),
       });
     } else {
@@ -129,7 +131,6 @@ app.get("/preview/:key", async (req, res) => {
     res.status(500).send({ success: false, error });
   }
 });
-
 
 /**
  * Get only one

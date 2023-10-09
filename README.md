@@ -5,6 +5,9 @@ You can create your Bins and share content (Check public switch and check on men
 
 Also on Editor you can compile `Ejs`, `Scss`, `Markdown` and ´TypeScript´ with Javascript block.
 
+
+![Javascript calendar](./screenshot1.png)
+
 ### Examples
 
 *Convert Ejs to Html:* 

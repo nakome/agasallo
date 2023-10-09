@@ -8,9 +8,7 @@ const FrameComponent = React.forwardRef((props, ref) =>
   props.refresh ? (
     <Loader />
   ) : props.loadingFrame ? (
-    <iframe title={lang.preview} src={props.iframSrc} ref={props.myRef}>
-      {" "}
-    </iframe>
+    <iframe id="framePreview" title={lang.preview} src={props.iframSrc} ref={props.myRef}></iframe>
   ) : (
     <section className="infoFrame">{lang.infoframe}</section>
   )

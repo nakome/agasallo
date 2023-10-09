@@ -47,15 +47,21 @@
 
     <title>Agasallo | <%= data.title %></title>
 
+    <% if(debug) { %>
+    <link defer rel="stylesheet" href="/api/Consolex/index.css"/>
+    <% } %>
+
+    <style rel="stylesheet"><%- data.css_code %></style>
+
     <% if(data.css_links) { %>
         <% data.css_links.split('\n').forEach(function(link) { %>
             <link rel="stylesheet" href="<%= link.trim() %>" />
         <% }); %>
     <% }; %>
 
-    <style rel="stylesheet"><%- data.css_code %></style>
 </head>
 <body>
+
     <%- data.html_code %>
 
     <% if(data.js_links) { %>
@@ -63,6 +69,11 @@
             <script src="<%= link.trim() %>"></script>
         <% }); %>
     <% }; %>
+
     <script rel="javascript" type="module"><%- data.js_code %></script>
+
+    <% if(debug) { %>
+    <script defer rel="javascript" src="/api/Consolex/index.js"></script>
+    <% } %>
 </body>
 </html>

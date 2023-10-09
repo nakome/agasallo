@@ -61,7 +61,7 @@ pre {
   user-select: text
 }
 
-pre::selection {
+.cm-theme::selection {
   background: var(--warning);
   color: var(--dark)
 }
@@ -82,20 +82,20 @@ kbd {
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px
+  width: 5px;
+  height: 5px
 }
 
 ::-webkit-scrollbar-track {
-  background: color-mix(in srgb, var(--primary), var(--secondary))
+  background:  var(--secondary)
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--secondary), var(--info))
+  background: var(--primary)
 }
 
 ::-webkit-scrollbar-corner {
-  background: color-mix(in srgb, var(--primary), var(--secondary))
+  background: var(--secondary)
 }
 
 .switch-form {
@@ -820,13 +820,11 @@ details .details-body {
 }
 
 .gutter.gutter-horizontal {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAAXNSR0IArs4c6QAAACdJREFUKFNjbJ+49joDI+OtyrwgfxibEasgAxbAiFVw1MzR8MSblgAoFIefwdDOtwAAAABJRU5ErkJggg==');
-  cursor: col-resize
+  cursor: col-resize;
 }
 
 .gutter.gutter-vertical {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAAAXNSR0IArs4c6QAAAC1JREFUKFNjbJ+49joDI+OtyrwgfwYGBgZ68RnpZRG6xxhBvhwIMHA+HqigBgB72pnmtvALQQAAAABJRU5ErkJggg==');
-  cursor: row-resize
+  cursor: row-resize;
 }
 
 .cm-theme {
@@ -991,8 +989,8 @@ details .details-body {
   align-items: center;
   padding: 0;
   margin: 1px;
-  width: 32px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
   background: var(--secondary);
   border: 1px solid var(--secondary);
   color: var(--light);
@@ -1001,7 +999,7 @@ details .details-body {
 
 .code-header a:is(:hover, :focus, :active),
 .code-header button:is(:hover, :focus, :active) {
-  border-color: var(--warning);
+  opacity:0.8;
   color: var(--warning);
   transition: all .5s ease
 }

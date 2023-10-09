@@ -16,11 +16,14 @@ import Split from "react-split";
 import { MainApp, MainContent } from "./ui/Bones";
 import { BinContext } from "./ui/Context";
 import { Loader } from "./ui/Loader";
+
 // Api
 import { GetDataKey } from "./api/GetData";
 import { CreateNewBin, UpdateBin } from "./api/PostData";
+
 // Utils
 import { today } from "./utils/Date";
+
 // Language
 import lang from "./config/language.json";
 
@@ -37,6 +40,7 @@ const CodeBlock = React.lazy(() => import("./components/CodeBlockComponent"));
 
 // App
 export default function App() {
+
   let arrayOfStates = {
     key: "1234",
     title: `Untitled ${today()}`,
@@ -124,17 +128,6 @@ export default function App() {
     setIsOpen(!isOpen);
   }, [isOpen]);
 
-  // On press Ctrl+s save data
-  const saveBinOnKeyPress = React.useCallback(
-    (event) => {
-      if (event.ctrlKey && event.key === "s") {
-        event.preventDefault(); // Prevenir el comportamiento predeterminado de Ctrl+S
-        createOrUpdate();
-      }
-    },
-    [createOrUpdate]
-  );
-
   // On press Ctrl+enter save data
   const saveBinOnKeyPressTitle = React.useCallback(
     (event) => {
@@ -145,6 +138,15 @@ export default function App() {
     },
     [createOrUpdate]
   );
+
+  const sendCodeOnEnter = React.useCallback((evt) => {
+    if (evt.ctrlKey && evt.key === "s") {
+        evt.preventDefault();
+        evt.stopPropagation();
+        createOrUpdate();
+        return false;
+    }
+  },[createOrUpdate])
 
   // Format code
   async function formatCode(type) {
@@ -157,10 +159,10 @@ export default function App() {
             plugins: [prettierPluginBabel, prettierPluginEstree, prettierPluginHtml],
           });
           updateBin("jsContent", output);
-          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.successformat,true);
         } catch (err) {
           console.log(err);
-          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.errorformat,false);
         }
         break;
       case "typescript":
@@ -170,10 +172,10 @@ export default function App() {
             plugins: [prettierPluginTypescript, prettierPluginEstree, prettierPluginHtml],
           });
           updateBin("jsContent", output);
-          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.successformat,true);
         } catch (err) {
           console.log(err);
-          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.errorformat,false);
         }
         break;
       case "css":
@@ -183,11 +185,11 @@ export default function App() {
             parser: "css",
             plugins: [prettierPluginPostCss],
           });
-          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.successformat,true);
           updateBin("cssContent", output);
         } catch (err) {
           console.log(err);
-          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.errorformat,false);
         }
         break;
       case "html":
@@ -196,11 +198,11 @@ export default function App() {
             parser: "html",
             plugins: [prettierPluginHtml],
           });
-          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.successformat,true);
           updateBin("htmlContent", output);
         } catch (err) {
           console.log(err);
-          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.errorformat,false);
         }
         break;
       case "markdown":
@@ -209,13 +211,21 @@ export default function App() {
             parser: "markdown",
             plugins: [prettierPluginHtml, prettierPluginMarkdown],
           });
-          toast.success(lang.successformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.successformat,true);
           updateBin("htmlContent", output);
         } catch (err) {
           console.log(err);
-          toast.error(lang.errorformat, { position: toast.POSITION.BOTTOM_RIGHT });
+          sendNotification(lang.errorformat,false);
         }
         break;
+    }
+  }
+
+  function sendNotification(msg,status) {
+    if(status) {
+      toast.success(msg, { position: toast.POSITION.TOP_RIGHT });
+    }else{
+      toast.error(msg, { position: toast.POSITION.TOP_RIGHT });
     }
   }
 
@@ -331,9 +341,7 @@ export default function App() {
     // Check if the save was successful
     if (request.success) {
       // Show a success message
-      toast.success(lang.successsave, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-      });
+      sendNotification(lang.successsave,true);
 
       // Clear input values
       updateBin("title", "");
@@ -373,21 +381,18 @@ export default function App() {
     if (request.success) {
       // Activate the refresh indicator
       setRefresh(true);
-      // Reload the iframe content
-      refIframe.current.contentWindow.location.reload(true);
+      // Send code
+      refIframe.current.contentWindow.postMessage(obj,"*");
       // Show a success message after a delay
       setTimeout(() => {
         // Deactivate the refresh indicator
         setRefresh(false);
-
         // Show a success message
-        toast.info(lang.successupdated, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
+        sendNotification(lang.successupdated,true);
       }, 800);
     } else {
       // Show an error message in case of failure
-      toast.error(lang.errorupdated);
+      sendNotification(lang.errorupdated,false);
     }
   }
 
@@ -405,15 +410,15 @@ export default function App() {
             toggleModalSettings={toggleModalSettings}
             updateBin={updateBin}
           />
-
           <MainContent>
             <Split
               sizes={[50, 50]}
               direction="horizontal"
               className="split-horizontal"
               minSize={1}
-              onKeyDown={saveBinOnKeyPress}
+              onKeyDown={sendCodeOnEnter}
               ref={refHorSplit}
+              gutterSize={2}
             >
               <div className="split-vertical">
                 <Split
@@ -422,6 +427,7 @@ export default function App() {
                   className="split-vertical-code"
                   minSize={1}
                   ref={refVertSplit}
+                  gutterSize={2}
                 >
                   {codeBlocks.map((block, index) => (
                     <CodeBlock
@@ -442,12 +448,12 @@ export default function App() {
                 </Split>
               </div>
               <div className="split-vertical" style={{ position: "relative" }}>
-                <FrameComponent
-                  loadingFrame={loadingFrame}
-                  refresh={refresh}
-                  iframSrc={iframSrc}
-                  myRef={refIframe}
-                />
+                  <FrameComponent
+                    loadingFrame={loadingFrame}
+                    refresh={refresh}
+                    iframSrc={iframSrc}
+                    myRef={refIframe}
+                  />
               </div>
             </Split>
           </MainContent>

@@ -10,6 +10,7 @@ import { Loader } from "./ui/Loader";
 const ErrorBoundary = React.lazy(() => import("./ui/ErrorBoundary"));
 const App = React.lazy(() => import("./App"))
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <React.Suspense fallback={<Loader/>}>
