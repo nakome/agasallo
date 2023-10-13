@@ -59,6 +59,9 @@
         <% }); %>
     <% }; %>
 
+    <% if(debug) { %>
+    <script defer rel="javascript" src="/api/Consolex/index.js"></script>
+    <% } %>
 </head>
 <body>
 
@@ -71,9 +74,5 @@
     <% }; %>
 
     <script rel="javascript" type="module"><%- data.js_code %></script>
-
-    <% if(debug) { %>
-    <script defer rel="javascript" src="/api/Consolex/index.js"></script>
-    <% } %>
 </body>
 </html>

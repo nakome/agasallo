@@ -73,6 +73,11 @@ iframe {
   border: none
 }
 
+select{
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: 1;
+}
 kbd {
   background: var(--secondary);
   padding: 2px 5px;
@@ -973,7 +978,6 @@ details .details-body {
   padding: 2px;
   margin: 2px 0;
   height: 30px;
-  line-height: 30px;
   text-transform: capitalize
 }
 
@@ -1068,3 +1072,4 @@ details .details-body {
     min-width: 142px !important
   }
 }
+
