@@ -72,46 +72,4 @@ app.delete("/:key", async (req, res) => {
   }
 });
 
-/**
- * Add new Bin
- */
-app.post("/import/data", async (req, res) => {
-
-  const data = req.body;
-
-  // Is array ?
-  if (!Array.isArray(data)) {
-    return res.status(400).json({ status: 400, msg: 'Sorry, this is not Json file.' });
-  }
-
-  // Values you want to check in the array
-  const expectedValues = ["create_at","css_code","css_links","css_type","html_code","html_type","js_code","js_links","js_type","key","public","title","update_at"];
-
-  // Check values
-  const allObjectsHaveExpectedValues = data.every((object) => {
-    return expectedValues.every((val) =>
-      Object.prototype.hasOwnProperty.call(object, val)
-    );
-  });
-
-  // If error show msg
-  if (!allObjectsHaveExpectedValues) {
-    return res.status(400).json({ status: 400, msg: 'Some objects in the array do not contain expected values.' });
-  }
-
-  // Import files 20 to 20
-  for (let i = 0; i < data.length; i += 20) {
-    const groupOfData = data.slice(i, i + 20);
-    const output = await db.putMany(groupOfData);
-    if (output.processed) {
-      console.log(output)
-      return res.status(200).json({ status: 200, msg: 'Success on import data.',data: output});
-    } else {
-      console.error('Error al insertar elementos:', error);
-      return res.status(500).json({ status: 500, msg: 'Error al insertar elementos.' });
-    }
-  }
-
-});
-
 export default app;

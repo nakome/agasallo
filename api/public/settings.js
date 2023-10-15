@@ -18,13 +18,11 @@ function handleImport(evt) {
     // Disabled bottons
     btn_import.setAttribute("disabled", true);
     btn_import.classList.add("button-loading");
-    // Import json
-    importJson(input_import.files[0]).then((r) => {
-      alert(r.msg);
+    importJson(input_import.files[0]).then(() => {
       btn_import.textContent = "Import";
       btn_import.removeAttribute("disabled");
       btn_import.classList.remove("button-loading");
-    });
+    })
   }
   return false;
 }
@@ -54,18 +52,46 @@ async function importJson(file) {
  * @param {object} params
  * @returns
  */
-async function sendFile(params) {
-  const url = `${location.origin}/api/import/data`;
-  const options = {
-    method: "POST",
-    body: JSON.stringify(params),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  };
-  const response = await fetch(url, options);
-  const output = await response.json();
-  return output;
+async function sendFile(data) {
+
+  let info = document.getElementById("import_msg");
+  let count = 0;
+
+  if (!Array.isArray(data)) {
+    info.innerHTML += '<div class="info_error">Error, the import file is not array.</div>';
+  }
+  // Values you want to check in the array
+  const expectedValues = ["create_at","css_code","css_links","css_type","html_code","html_type","js_code","js_links","js_type","key","public","title","update_at"];
+  // Check if all objects in the array contain the expected values
+  const areValuesPresentInAllObjects = data.every(obj =>
+    expectedValues.every(key => obj.hasOwnProperty(key))
+  );
+
+  // If error show msg
+  if (!areValuesPresentInAllObjects) {
+    info.innerHTML += '<div class="info_error">Some objects in the array do not contain expected values.</div>';
+  }
+
+  // Insert 25-by-25 objects
+  const groupOfElements = [];
+  for (let i = 0; i < data.length; i += 20) {
+    count = i + 20;
+    groupOfElements.push(data.slice(i,count));
+  }
+
+  // Insert many
+  for (const group of groupOfElements) {
+    try {
+      let output = await db.putMany([...group]);
+      if(output.processed) {
+        info.innerHTML += `<div class="info_success">Success to import data, total: 20</div>`;
+      }
+    } catch (error) {
+      console.error('Error al insertar elementos:', error);
+      info.innerHTML += `<div class="info_error">Error on insert elements in Database.</div>`;
+    }
+  }
+  info.innerHTML += '<div class="info_success">Finish import data</div>';
 }
 
 /** ---------------------------------
@@ -81,6 +107,7 @@ importRawUrl.addEventListener("click", handleImportRawUrl);
 function handleImportRawUrl(evt) {
   evt.preventDefault();
   let url = rawUrl.value;
+  let info = document.getElementById('import_url_msg');
   if (url.length) {
     // Disabled input & add class button
     rawUrl.setAttribute("disabled", true);
@@ -114,15 +141,21 @@ function handleImportRawUrl(evt) {
         );
         // If error show msg
         if (!checkValuesIfExists) {
-          alert("Some objects in the array do not contain expected values.");
+          info.innerHTML += '<div class="info_error">Some objects in the array do not contain expected values.</div>';
           return false;
         }
         // Insert response
         db.insert(response)
           .then((r) =>
-            r.title ? alert("Success to import data, check result in app.") : ""
+            r.title
+              ? (info.innerHTML +=
+                  '<div class="info_success">Success to import data, check result in app.</div>')
+              : ""
           )
-          .catch((r) => alert(r));
+          .catch(
+            (r) => (info.innerHTML += `<div class="info_error">${r}</div>`)
+          );
+        info.innerHTML += `<div class="info_success">Finish import raw.</div>`
       }
       return false;
     });
