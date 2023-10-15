@@ -14,84 +14,102 @@ btn_import.addEventListener("click", handleImport, false);
 function handleImport(evt) {
   evt.preventDefault();
   btn_import.textContent = "Importing...";
+
   if (input_import.value !== "") {
-    // Disabled bottons
+    // Disable buttons
     btn_import.setAttribute("disabled", true);
     btn_import.classList.add("button-loading");
+
     importJson(input_import.files[0]).then(() => {
       btn_import.textContent = "Import";
       btn_import.removeAttribute("disabled");
       btn_import.classList.remove("button-loading");
-    })
+    });
   }
+
   return false;
 }
 
 /**
  * Import Json file
  *
- * @param {file} file
- * @returns
+ * @param {file} file - The JSON file to import
+ * @returns {Promise} A promise that resolves with the imported data
  */
 async function importJson(file) {
-  const lector = new FileReader();
-  const outputPromise = new Promise((resolve) => {
-    lector.onload = () => {
-      const data = JSON.parse(lector.result);
+  // Create a new FileReader object
+  const reader = new FileReader();
+
+  // Create a promise that resolves when the file is loaded
+  const fileLoadedPromise = new Promise((resolve) => {
+    // Set the onload event handler for the reader
+    reader.onload = () => {
+      // Parse the loaded data as JSON
+      const data = JSON.parse(reader.result);
+
+      // Resolve the promise with the imported data
       resolve(sendFile(data));
     };
   });
-  lector.readAsText(file);
-  const output = await outputPromise;
+
+  // Read the file as text
+  reader.readAsText(file);
+
+  // Wait for the file to be loaded and return the output
+  const output = await fileLoadedPromise;
   return output;
 }
 
-/**
- * Send file with params
- *
- * @param {object} params
- * @returns
- */
+// Function to send the file
 async function sendFile(data) {
-
+  // Get element with id "import_msg".
   let info = document.getElementById("import_msg");
   let count = 0;
 
+  // Add import message
+  info.innerHTML += `<div class="info_success">Please wait, importing data 20 by 20...</div>`;
+
+  // Verify if the imported file is an array
   if (!Array.isArray(data)) {
-    info.innerHTML += '<div class="info_error">Error, the import file is not array.</div>';
+    info.innerHTML += '<div class="info_error">Error, the import file is not an array..</div>';
   }
-  // Values you want to check in the array
-  const expectedValues = ["create_at","css_code","css_links","css_type","html_code","html_type","js_code","js_links","js_type","key","public","title","update_at"];
+
+  // Values to be checked in the array
+  const expectedValues = ["create_at", "css_code", "css_links", "css_type", "html_code", "html_type", "js_code", "js_links", "js_type", "key", "public", "title", "update_at"];
+
   // Check if all objects in the array contain the expected values
   const areValuesPresentInAllObjects = data.every(obj =>
     expectedValues.every(key => obj.hasOwnProperty(key))
   );
 
-  // If error show msg
+  // Show error message if not all expected values are found in the objects.
   if (!areValuesPresentInAllObjects) {
-    info.innerHTML += '<div class="info_error">Some objects in the array do not contain expected values.</div>';
+    info.innerHTML += '<div class="info_error">Some objects in the array do not contain the expected values..</div>';
   }
 
-  // Insert 25-by-25 objects
+  // Insert objects 20 at a time
   const groupOfElements = [];
   for (let i = 0; i < data.length; i += 20) {
     count = i + 20;
-    groupOfElements.push(data.slice(i,count));
+    groupOfElements.push(data.slice(i, count));
   }
 
-  // Insert many
+  // Insert objects into the database
   for (const group of groupOfElements) {
     try {
       let output = await db.putMany([...group]);
-      if(output.processed) {
-        info.innerHTML += `<div class="info_success">Success to import data, total: 20</div>`;
+      if (output.processed) {
+        let total = output.processed.items.length;
+        info.innerHTML += `<div class="info_success">Successful data import, total: ${total} objects</div>`;
       }
     } catch (error) {
       console.error('Error al insertar elementos:', error);
-      info.innerHTML += `<div class="info_error">Error on insert elements in Database.</div>`;
+      info.innerHTML += `<div class="info_error">Error inserting elements into the database.</div>`;
     }
   }
-  info.innerHTML += '<div class="info_success">Finish import data</div>';
+
+  // Show import completion message
+  info.innerHTML += '<div class="info_success">Completion of data import</div>';
 }
 
 /** ---------------------------------
@@ -169,21 +187,21 @@ function handleImportRawUrl(evt) {
  * @returns
  */
 async function ImportRawUrl(url) {
+  let info = document.getElementById('import_url_msg');
   try {
     const response = await fetch(url);
-    console.log(response);
     const result = await response.json();
     if (result && result.success) {
       if (result.data === null) {
-        alert("Error on retrive url, check if url contains correct data.");
+        info.innerHTML += '<div class="info_error">Error on retrive url, check if url contains correct data.</div>';
       }
       return result.data;
     } else {
-      alert("Error on retrieve URL, check the response format.");
+      info.innerHTML += '<div class="info_error">Error on retrieve URL, check the response format.</div>';
       return null;
     }
   } catch (error) {
-    alert("Error while fetching or parsing data");
+    info.innerHTML += '<div class="info_error">Error while fetching or parsing data.</div>';
     console.error("Error while fetching or parsing data:", error);
     return null;
   }
