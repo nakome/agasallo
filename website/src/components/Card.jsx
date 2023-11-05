@@ -9,8 +9,6 @@ import { Button } from "./Forms";
 -----------------------------*/
 import lang from "../config/language.json"
 
-
-
 /**
  * Card
  * @param {mixed} props

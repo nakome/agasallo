@@ -1,29 +1,12 @@
-export const GetAllData = async () => {
-    try {
-        let url = `${location.origin}/api`;
-        const response = await fetch(url)
-        return await response.json()
-    } catch (error) {
-        return JSON.stringify({success:false,msg:error})
-    }
-}
+export const GetAllData = async () => fetchGet(`${location.origin}/api`);
+export const GetDataKey = async (key) => fetchGet(`${location.origin}/api/uid/${key}`);
+export const SearchData = async (name) => fetchGet(`${location.origin}/api/s/${name}`);
 
-export const GetDataKey = async (key) => {
+async function fetchGet(url) {
     try {
-        let url = `${location.origin}/api/uid/${key}`
-        const response = await fetch(url)
-        return await response.json()
+        const response = await fetch(url);
+        return await response.json();
     } catch (error) {
-        return JSON.stringify({success:false,msg:error})
-    }
-}
-
-export const SearchData = async (name) => {
-    try {
-        let url = `${location.origin}/api/s/${name}`
-        const response = await fetch(url)
-        return await response.json()
-    } catch (error) {
-        return JSON.stringify({success:false,msg:error})
+        return JSON.stringify({ success: false, msg: error });
     }
 }

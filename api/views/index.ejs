@@ -47,10 +47,6 @@
 
     <title>Agasallo | <%= data.title %></title>
 
-    <% if(debug) { %>
-    <link defer rel="stylesheet" href="/api/Consolex/index.css"/>
-    <% } %>
-
     <style rel="stylesheet"><%- data.css_code %></style>
 
     <% if(data.css_links) { %>
@@ -60,7 +56,8 @@
     <% }; %>
 
     <% if(debug) { %>
-    <script defer rel="javascript" src="/api/Consolex/index.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+        <script rel="javascript">eruda.init({defaults: {theme: 'Dracula'}});</script>
     <% } %>
 </head>
 <body>

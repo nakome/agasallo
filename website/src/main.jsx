@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 
-import "normalize.css";
 import "./index.css";
 
 import { Loader } from "./ui/Loader";

@@ -3,14 +3,13 @@ import React from "react";
 import {
   BiExpand,
   BiCollapse,
-  BiCodeCurly,
-  BiX,
+  BiPaintRoll,
   BiLinkExternal,
-  BiCode
+  BiCodeBlock
 } from "react-icons/bi";
 
 import CodeMirror from "@uiw/react-codemirror";
-import { aura } from "@uiw/codemirror-theme-aura";
+import { dracula } from "@uiw/codemirror-theme-dracula";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 
 import { Button, Select } from "../ui/Forms";
@@ -86,23 +85,20 @@ export default function CodeBlock(props) {
               <BiLinkExternal />
             </a>
           )}
-
           <Button
             onClick={props.formatCode}
             className={active ? "button-active" : ""}
             title={Lang.formatcode}
           >
-             <BiCode />
+             <BiCodeBlock />
           </Button>
-
           <Button
             onClick={handlePreview}
             className={active ? "button-active" : ""}
             title={Lang.convertcode}
           >
-            {active ? <BiX /> : <BiCodeCurly />}
+            <BiPaintRoll />
           </Button>
-
           <Button onClick={props.expand} title={Lang.expandblock}>
             {props.active ? <BiExpand /> : <BiCollapse />}
           </Button>
@@ -115,14 +111,14 @@ export default function CodeBlock(props) {
             value={preview}
             height="100%"
             extensions={[loadLanguage((type === "babel" ? "javascript" : type))]}
-            theme={aura}
+            theme={dracula}
           />
         ) : (
           <CodeMirror
             value={props.content}
             height="100%"
             extensions={[loadLanguage((props.type === "babel" ? "javascript" : props.type))]}
-            theme={aura}
+            theme={dracula}
             onChange={props.setContent}
           />
         )}

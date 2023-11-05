@@ -8,12 +8,24 @@ import prettierPluginPostCss from "https://unpkg.com/prettier@3.0.3/plugins/post
 import prettierPluginTypescript from "https://unpkg.com/prettier@3.0.3/plugins/typescript.mjs";
 import prettierPluginMarkdown from "https://unpkg.com/prettier@3.0.3/plugins/markdown.mjs";
 
+import {
+  BiSave,
+  BiPlus,
+  BiCog,
+  BiMenu,
+  BiSolidSave,
+  BiLogoGithub,
+} from "react-icons/bi";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Split from "react-split";
 
+import 'winbox/dist/css/winbox.min.css'; // required
+import WinBox from 'react-winbox';
+
 // Components
-import { MainApp, MainContent } from "./ui/Bones";
+import { Input, Button, Textarea, Switch } from "./ui/Forms";
 import { BinContext } from "./ui/Context";
 import { Loader } from "./ui/Loader";
 
@@ -27,15 +39,7 @@ import { today } from "./utils/Date";
 // Language
 import lang from "./config/language.json";
 
-// Lazy components
-const HeaderComponent = React.lazy(() =>
-  import("./components/HeaderConmponent")
-);
-const DrawerComponent = React.lazy(() =>
-  import("./components/DrawerComponent")
-);
-const FrameComponent = React.lazy(() => import("./components/FrameComponent"));
-const ModalComponent = React.lazy(() => import("./components/ModalComponent"));
+const DrawerComponent = React.lazy(() => import("./components/DrawerComponent"));
 const CodeBlock = React.lazy(() => import("./components/CodeBlockComponent"));
 
 // App
@@ -159,7 +163,7 @@ export default function App() {
             plugins: [prettierPluginBabel, prettierPluginEstree, prettierPluginHtml],
           });
           updateBin("jsContent", output);
-          sendNotification(lang.successformat,true);
+          //sendNotification(lang.successformat,true);
         } catch (err) {
           console.log(err);
           sendNotification(lang.errorformat,false);
@@ -172,7 +176,7 @@ export default function App() {
             plugins: [prettierPluginTypescript, prettierPluginEstree, prettierPluginHtml],
           });
           updateBin("jsContent", output);
-          sendNotification(lang.successformat,true);
+          //sendNotification(lang.successformat,true);
         } catch (err) {
           console.log(err);
           sendNotification(lang.errorformat,false);
@@ -185,7 +189,7 @@ export default function App() {
             parser: "css",
             plugins: [prettierPluginPostCss],
           });
-          sendNotification(lang.successformat,true);
+          //sendNotification(lang.successformat,true);
           updateBin("cssContent", output);
         } catch (err) {
           console.log(err);
@@ -198,7 +202,7 @@ export default function App() {
             parser: "html",
             plugins: [prettierPluginHtml],
           });
-          sendNotification(lang.successformat,true);
+          //sendNotification(lang.successformat,true);
           updateBin("htmlContent", output);
         } catch (err) {
           console.log(err);
@@ -211,7 +215,7 @@ export default function App() {
             parser: "markdown",
             plugins: [prettierPluginHtml, prettierPluginMarkdown],
           });
-          sendNotification(lang.successformat,true);
+          //sendNotification(lang.successformat,true);
           updateBin("htmlContent", output);
         } catch (err) {
           console.log(err);
@@ -399,18 +403,58 @@ export default function App() {
   return (
     <BinContext.Provider value={bin}>
       <React.Suspense fallback={<Loader />}>
-        <MainApp>
-          <HeaderComponent
-            isNew={isNew}
-            toggleDrawer={toggleDrawer}
-            toggleToNewCode={toggleToNewCode}
-            saveDataOnKeyPressTitle={saveBinOnKeyPressTitle}
-            handleCreateNewCode={createHandler}
-            handleUpdateCode={updateHandler}
-            toggleModalSettings={toggleModalSettings}
-            updateBin={updateBin}
-          />
-          <MainContent>
+        <main className="app">
+          <header className="app-header">
+            <section className="app-header-left">
+              <Button onClick={toggleDrawer} title={lang.openmenu}>
+                <BiMenu />
+              </Button>
+              <Input
+                name="title"
+                id="title"
+                required={true}
+                type="text"
+                value={bin.title}
+                onChange={(e) => updateBin("title", e.target.value)}
+                placeholder={lang.title}
+                onKeyDown={saveBinOnKeyPressTitle}
+              />
+            </section>
+            <section className="app-header-center">
+              <h3>{lang.appname}</h3>
+            </section>
+            <section className="app-header-right">
+              <Button onClick={toggleToNewCode} title={lang.createnew}>
+                <BiPlus />
+              </Button>
+              {isNew ? (
+                <Button
+                  title={lang.savenew}
+                  className="button-warning"
+                  onClick={createOrUpdate}
+                >
+                  <BiSolidSave />
+                </Button>
+              ) : (
+                <Button title={lang.updatecode} onClick={createOrUpdate}>
+                  <BiSave />
+                </Button>
+              )}
+              <Button onClick={toggleModalSettings} title={lang.modalsettings}>
+                <BiCog />
+              </Button>
+              <a
+                rel="noopener"
+                target="_blank"
+                className="button"
+                href="https://github.com/nakome/agasallo"
+                title="Github"
+              >
+                <BiLogoGithub />
+              </a>
+            </section>
+          </header>
+          <section className="app-content">
             <Split
               sizes={[50, 50]}
               direction="horizontal"
@@ -448,27 +492,77 @@ export default function App() {
                 </Split>
               </div>
               <div className="split-vertical" style={{ position: "relative" }}>
-                  <FrameComponent
-                    loadingFrame={loadingFrame}
-                    refresh={refresh}
-                    iframSrc={iframSrc}
-                    myRef={refIframe}
-                  />
+                {refresh ? (
+                  <Loader />
+                ) : loadingFrame ? (
+                  <iframe id="framePreview" title={lang.preview} src={iframSrc} ref={refIframe}></iframe>
+                ) : (
+                  <section className="infoFrame">
+                      <img src={'./api/icons/512.png'} alt="" />
+                      {lang.infoframe}
+                  </section>
+                )}
               </div>
             </Split>
-          </MainContent>
+          </section>
+
           <DrawerComponent
             isOpen={isOpen}
             toggleDrawer={toggleDrawer}
             handleOpenBin={openHandler}
           />
-          <ModalComponent
-            isOpenSettings={isOpenSettings}
-            toggleModalSettings={toggleModalSettings}
-            updateBin={updateBin}
-          />
+
+          {isOpenSettings && (
+          <WinBox
+            noFull
+            title={lang.settings}
+            x="center"
+            y="center"
+            width={Math.min(document.body.clientWidth, 700)}
+            height={Math.min(document.body.clientHeight, 420)}
+            onClose={() => setIsOpenSettings(!isOpenSettings)}
+            >
+
+            <div style={{padding: '10px'}}>
+              <Textarea
+                required={false}
+                name="cssLinks"
+                id="cssLinksid"
+                className="no-resize"
+                error={bin.cssLinks.length > 150 ? "error" : ""}
+                onChange={(e) => updateBin("cssLinks", e.target.value)}
+                placeholder={lang.putyourlinks}
+                value={bin.cssLinks}
+                label={lang.csslinks}
+                style={{ height: "7rem" }}
+              />
+              <Textarea
+                required={false}
+                className="no-resize"
+                name="jsLinks"
+                id="jsLinksid"
+                error={bin.jsLinks.length > 150 ? "error" : ""}
+                onChange={(e) => updateBin("jsLinks", e.target.value)}
+                placeholder={lang.putyourlinks}
+                value={bin.jsLinks}
+                label={lang.jslinks}
+                style={{ height: "7rem" }}
+              />
+              <Switch
+                name="public"
+                ischecked={bin.public ? "on" : "off"}
+                onChange={() => updateBin("public", !bin.public)}
+                title={lang.publiccode}
+              />
+
+              <a href={`${location.origin}/api/settings`} style={{color: "var(--light)"}}>{lang.moresettings}</a>
+            </div>
+          </WinBox>
+          )}
+
+
           <ToastContainer theme="dark" />
-        </MainApp>
+        </main>
       </React.Suspense>
     </BinContext.Provider>
   );

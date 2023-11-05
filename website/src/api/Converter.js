@@ -1,50 +1,18 @@
-export const MarkdownToHtml = async (content) => {
-  try {
-    const response = await fetchData("/api/convert/to/md", {
-      html_code: content,
-    });
-    const output = await response;
-    return output.status ? output.data : "Error: " + JSON.stringify(output);
-  } catch (error) {
-    return error;
-  }
-};
-export const ScssToCss = async (content) => {
-  try {
-    const response = await fetchData("/api/convert/to/scss", {
-      css_code: content,
-    });
-    const output = await response;
-    return output.status ? output.data : "Error: " + JSON.stringify(output);
-  } catch (error) {
-    return error;
-  }
-};
-export const TypeScriptToJs = async (content) => {
-  try {
-    const response = await fetchData("/api/convert/to/ts", {
-      js_code: content,
-    });
-    const output = await response;
-    return output.status ? output.data : "Error: " + JSON.stringify(output);
-  } catch (error) {
-    return error;
-  }
-};
-export const BabelToJs = async (content) => {
-  try {
-    const response = await fetchData("/api/convert/to/babel", {
-      js_code: content,
-    });
-    const output = await response;
-    return output.status ? output.data : "Error: " + JSON.stringify(output);
-  } catch (error) {
-    return error;
-  }
-};
+export const MarkdownToHtml = async (content) => await formatCode("/api/convert/to/md", {html_code: content});
+export const ScssToCss = async (content) => await formatCode("/api/convert/to/scss", {css_code: content});
+export const TypeScriptToJs = async (content) => await formatCode("/api/convert/to/ts", {js_code: content});
+export const BabelToJs = async (content) => await formatCode("/api/convert/to/babel", {js_code: content});
 
+async function formatCode(url, args) {
+  try {
+    const response = await fetchCode(url, args);
+    return response.status ? response.data : "Error: " + JSON.stringify(response);
+  } catch (error) {
+    return error;
+  }
+}
 
-async function fetchData(url, data) {
+async function fetchCode(url, data) {
   let options = {
     method: "POST",
     body: JSON.stringify(data),

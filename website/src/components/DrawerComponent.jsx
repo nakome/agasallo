@@ -12,7 +12,7 @@ import { SearchData, GetAllData } from "../api/GetData";
 import { DeleteBin } from "../api/PostData";
 
 // Components
-import { InputSearch, Button } from "../ui/Forms";
+import { InputSearch } from "../ui/Forms";
 import EmptyDb from "../ui/EmptyDb";
 import Card from "../ui/Card";
 import { Loader } from "../ui/Loader";

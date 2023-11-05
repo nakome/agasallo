@@ -1,4 +1,11 @@
-# Agasallo
+---
+app_name: Agasallo
+tagline: Your editor code
+open_code: true
+media:
+  - screenshots/screen-1.png
+  - screenshots/screen-2.png
+---
 
 
 This is a simple Html editor to create your examples or test code. 
