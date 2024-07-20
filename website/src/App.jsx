@@ -39,8 +39,8 @@ import { today } from "./utils/Date";
 // Language
 import lang from "./config/language.json";
 
-const DrawerComponent = React.lazy(() => import("./components/DrawerComponent"));
-const CodeBlock = React.lazy(() => import("./components/CodeBlockComponent"));
+const DrawerComponent = React.lazy(() => import("./ui/DrawerComponent"));
+const CodeBlock = React.lazy(() => import("./ui/CodeBlockComponent"));
 
 // App
 export default function App() {
@@ -521,8 +521,7 @@ export default function App() {
             width={Math.min(document.body.clientWidth, 700)}
             height={Math.min(document.body.clientHeight, 420)}
             onClose={() => setIsOpenSettings(!isOpenSettings)}
-            >
-
+          >
             <div style={{padding: '10px'}}>
               <Textarea
                 required={false}

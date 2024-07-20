@@ -17,9 +17,5 @@ micros:
     public_routes:
       - "/share/*"
       - "/raw/*"
-      - "/ejs/*"
-      - "/ts/*"
-      - "/babel/*"
-      - "/scss/*"
-      - "/md/*"
+      - "/convert/to/*"
       - "/icons/*"

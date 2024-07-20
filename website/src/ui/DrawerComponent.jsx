@@ -12,10 +12,10 @@ import { SearchData, GetAllData } from "../api/GetData";
 import { DeleteBin } from "../api/PostData";
 
 // Components
-import { InputSearch } from "../ui/Forms";
-import EmptyDb from "../ui/EmptyDb";
-import Card from "../ui/Card";
-import { Loader } from "../ui/Loader";
+import { InputSearch } from "./Forms";
+import EmptyDb from "./EmptyDb";
+import Card from "./Card";
+import { Loader } from "./Loader";
 
 // language
 import lang from "../config/language.json";

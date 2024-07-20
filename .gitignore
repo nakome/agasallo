@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 release.sh
 public/
-
+.bruno
 node_modules
 
 dist-ssr
